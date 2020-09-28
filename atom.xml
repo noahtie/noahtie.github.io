@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2020-09-28T06:21:12.360Z</updated>
+  <updated>2020-09-28T14:31:33.208Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,13 +17,41 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>MoeCTF 2020 WriteUp</title>
+    <link href="http://example.com/2020/09/28/MoeCTF2020/"/>
+    <id>http://example.com/2020/09/28/MoeCTF2020/</id>
+    <published>2020-09-28T14:25:37.349Z</published>
+    <updated>2020-09-28T14:31:33.208Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="比赛介绍"><a href="#比赛介绍" class="headerlink" title="比赛介绍"></a>比赛介绍</h1><blockquote><p>MoeCTF是西安电子科技大学一年一度的信息安全新生夺旗赛, 由西电信息安全协会面向全体准大学生举办, 题目难度不高且坡度平缓, 比赛平台开设时间很长, 0基础新生可以通过本次比赛对信息安全夺旗赛(CTF)有一个基础且全面的认识, 中学参加过一些CTF比赛的准大学生们也可以通过本次比赛重温CTF赛事.</p><p>MoeCTF除了设有常规CTF比赛相关的分类之外也开设或有计划开设了算法编程类, 运维类, 旨在提供一个知识覆盖全面的做题环境, 同时帮助有过信息学竞赛经历的新生们更快转型.</p><p>MoeCTF的积分方式为最简单的静态积分方式, 选手解题并获取固定的分数, 不设动态积分, 不设一血加成, 选手即使在比赛进行时参赛也不必担心分数差距. 部分题目出题人可能提供题目奖励, 比赛本身无奖项. 比赛结束后平台会继续维护一周供各位选手复盘, 写题解. 西电新生们比赛结束后可能会要求提交题解, 作为西电信息安全协会(XDSEC)2020秋季招新的一个重要砝码. 欢迎大家前来参加比赛, 与各路极客同台竞技, 也欢迎新生们在比赛结束后加入XDSEC, 分享技术, 共同进步!</p><p>西电信息安全协会(XDSEC)是由08, 09级学长自发组建的学生组织, 面向全校各年级同学 ,期间多次与学校合作, 自行管理和发展至今. 协会资源丰富, 在信息安全领域口碑十分优秀. 协会以致力于技术分享与进步为宗旨, 秉承低调, 分享, 专注, 精进, 自由的精神, 旨在为我校热爱信息安全技术的同学建立一个氛围良好的交流平台, 扩大信息安全在我校的影响力.</p></blockquote><a id="more"></a><hr><h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="Re-7"><a href="#Re-7" class="headerlink" title="Re (-7)"></a>Re (-7)</h2><ol><li>逆向工程入门指南（略）</li><li>Welcome To Re</li><li>Thank you Java</li><li>SimpleRe</li><li>Protection</li><li>Real EasyPython</li><li>RollCall</li><li>RxEncode</li></ol><h2 id="Pwn-5"><a href="#Pwn-5" class="headerlink" title="Pwn (-5)"></a>Pwn (-5)</h2><ol><li>Welcome to pwn（略）</li><li>Pwn从入门到入狱（略）</li><li>Baby pwn</li><li>Baby shellcode</li><li>unusual shellcode</li></ol><h2 id="Algorithm-3"><a href="#Algorithm-3" class="headerlink" title="Algorithm (-3)"></a>Algorithm (-3)</h2><ol><li>mess</li><li>Frank，永远滴神</li><li>赤道企鹅，永远滴神</li><li>千层饼</li></ol><h2 id="Crypto-7"><a href="#Crypto-7" class="headerlink" title="Crypto (-7)"></a>Crypto (-7)</h2><ol><li>crypto入门指北（略）</li><li>easycrypto</li><li>rsa_begin</li></ol><h2 id="Misc-4"><a href="#Misc-4" class="headerlink" title="Misc (-4)"></a>Misc (-4)</h2><ol><li>Welcome</li><li>MD5</li><li>base64</li><li>hey fxck you！</li><li>base64？¿</li><li>Pseudo Encrypt</li><li>不 会 吧 ？ 就 这 ¿</li><li>Cor1e的支票</li><li>A3FXCK</li><li>⑨的完美算数教室</li><li>停不下来了啊啊啊啊啊啊啊</li><li>星空</li><li>简单的社工题</li></ol><h2 id="Classic-Crypto-fin"><a href="#Classic-Crypto-fin" class="headerlink" title="Classic Crypto (fin)"></a>Classic Crypto (fin)</h2><ol><li>大帝的征程#1</li><li>大帝的征程#2</li><li>外面的世界</li><li>大帝的征程#3</li><li>大帝的征程#维吉尼亚</li><li>大帝的征程#维吉尼亚Ex</li></ol><h2 id="Web-fin"><a href="#Web-fin" class="headerlink" title="Web (fin)"></a>Web (fin)</h2><ol><li>GET</li><li>POST</li><li>小饼干</li><li>Introduction</li><li>一句话</li><li>EzMath</li><li>三心二意</li><li>俄罗斯头套</li><li>Moe include</li><li>Moe unserialize</li><li>EzXXE</li></ol><h2 id="Android-fin"><a href="#Android-fin" class="headerlink" title="Android (fin)"></a>Android (fin)</h2><ol><li>Click It！</li><li>Baby Andriod</li></ol><h2 id="Sign-in（略）-fin"><a href="#Sign-in（略）-fin" class="headerlink" title="Sign in（略）(fin)"></a>Sign in（略）(fin)</h2><h2 id="DevOps-1"><a href="#DevOps-1" class="headerlink" title="DevOps (-1)"></a>DevOps (-1)</h2><h2 id="IoT-1"><a href="#IoT-1" class="headerlink" title="IoT (-1)"></a>IoT (-1)</h2><hr><p><font size=14pt>WP具体内容将在比赛结束后放出</font></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;比赛介绍&quot;&gt;&lt;a href=&quot;#比赛介绍&quot; class=&quot;headerlink&quot; title=&quot;比赛介绍&quot;&gt;&lt;/a&gt;比赛介绍&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;MoeCTF是西安电子科技大学一年一度的信息安全新生夺旗赛, 由西电信息安全协会面向全体准大学生举办, 题目难度不高且坡度平缓, 比赛平台开设时间很长, 0基础新生可以通过本次比赛对信息安全夺旗赛(CTF)有一个基础且全面的认识, 中学参加过一些CTF比赛的准大学生们也可以通过本次比赛重温CTF赛事.&lt;/p&gt;
+&lt;p&gt;MoeCTF除了设有常规CTF比赛相关的分类之外也开设或有计划开设了算法编程类, 运维类, 旨在提供一个知识覆盖全面的做题环境, 同时帮助有过信息学竞赛经历的新生们更快转型.&lt;/p&gt;
+&lt;p&gt;MoeCTF的积分方式为最简单的静态积分方式, 选手解题并获取固定的分数, 不设动态积分, 不设一血加成, 选手即使在比赛进行时参赛也不必担心分数差距. 部分题目出题人可能提供题目奖励, 比赛本身无奖项. 比赛结束后平台会继续维护一周供各位选手复盘, 写题解. 西电新生们比赛结束后可能会要求提交题解, 作为西电信息安全协会(XDSEC)2020秋季招新的一个重要砝码. 欢迎大家前来参加比赛, 与各路极客同台竞技, 也欢迎新生们在比赛结束后加入XDSEC, 分享技术, 共同进步!&lt;/p&gt;
+&lt;p&gt;西电信息安全协会(XDSEC)是由08, 09级学长自发组建的学生组织, 面向全校各年级同学 ,期间多次与学校合作, 自行管理和发展至今. 协会资源丰富, 在信息安全领域口碑十分优秀. 协会以致力于技术分享与进步为宗旨, 秉承低调, 分享, 专注, 精进, 自由的精神, 旨在为我校热爱信息安全技术的同学建立一个氛围良好的交流平台, 扩大信息安全在我校的影响力.&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    <category term="CTF" scheme="http://example.com/categories/CTF/"/>
+    
+    
+    <category term="CTF" scheme="http://example.com/tags/CTF/"/>
+    
+    <category term="MoeCTF" scheme="http://example.com/tags/MoeCTF/"/>
+    
+  </entry>
+  
+  <entry>
     <title>CTF中的图片隐写</title>
     <link href="http://example.com/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/"/>
     <id>http://example.com/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</id>
     <published>2020-09-28T06:02:09.036Z</published>
-    <updated>2020-09-28T06:21:12.360Z</updated>
+    <updated>2020-09-28T14:17:58.530Z</updated>
     
-    <content type="html"><![CDATA[<ol><li><p>所有图片通用方法</p><ul><li><p>Stegosolve查看是否颜色通道隐写</p></li><li><p>UE查看内嵌字符串</p></li><li><p>Exiftool查看Exif信息</p></li><li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p></li><li><p>binwalk查看是否有包含其他文件</p></li></ul></li></ol><a id="more"></a><ul><li><p>foremost分离包含文件</p></li><li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li><li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p></li></ul><ol start="2"><li><p>png文件</p><ul><li>pngcheck</li><li>修改文件头以改变图片高度、宽度</li><li>zsteg</li></ul></li><li><p>gif文件</p><ul><li>Namo Gif Animator分离帧</li></ul></li><li><p>bmp</p><ul><li><p>zsteg（<a href="https://github.com/zed-oxff/zsteg%EF%BC%89%E9%9C%80%E8%A6%81ruby%E7%8E%AF%E5%A2%83">https://github.com/zed-oxff/zsteg）需要ruby环境</a></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure></li></ul></li></ol>]]></content>
+    <content type="html"><![CDATA[<ol><li><p>所有图片通用方法</p><ul><li><p>Stegosolve查看是否颜色通道隐写</p></li><li><p>UE查看内嵌字符串</p></li><li><p>Exiftool查看Exif信息</p></li><li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p></li><li><p>binwalk查看是否有包含其他文件</p></li></ul></li></ol><a id="more"></a><ul><li><p>foremost分离包含文件</p></li><li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li><li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p></li></ul><ol start="2"><li><p>png文件</p><ul><li>pngcheck</li><li>修改文件头以改变图片高度、宽度</li><li>zsteg</li></ul></li><li><p>gif文件</p><ul><li>Namo Gif Animator分离帧</li></ul></li><li><p>bmp</p><ul><li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li></ul></li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>]]></content>
     
     
     <summary type="html">&lt;ol&gt;
