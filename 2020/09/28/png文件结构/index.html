@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-noah.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-noah.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-noah.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：    十进制数 137 80 78 71 13 10 26 10    十六进制数 89 50 4E 47 0D 0A 1A 0A   其中第一个字节0x89超出了ASCII字符的范围，这是为了避免某些软件将PNG文件当做文本文件来处理。文件中剩余的部分由3个以上的PNG的数据块（Chunk）按照特定的顺序组成，因此，一个标准的P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PNG文件结构">
+<meta property="og:url" content="http://example.com/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="NoahBox">
+<meta property="og:description" content="根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：    十进制数 137 80 78 71 13 10 26 10    十六进制数 89 50 4E 47 0D 0A 1A 0A   其中第一个字节0x89超出了ASCII字符的范围，这是为了避免某些软件将PNG文件当做文本文件来处理。文件中剩余的部分由3个以上的PNG的数据块（Chunk）按照特定的顺序组成，因此，一个标准的P">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-28T06:00:24.745Z">
+<meta property="article:modified_time" content="2020-09-28T06:21:52.161Z">
+<meta property="article:author" content="NoahTie">
+<meta property="article:tag" content="隐写">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>PNG文件结构 | NoahBox</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">NoahBox</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hell is Other People.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="NoahTie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NoahBox">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PNG文件结构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-28 14:00:24 / 修改时间：14:21:52" itemprop="dateCreated datePublished" datetime="2020-09-28T14:00:24+08:00">2020-09-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">文件结构</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：</p>
+<table>
+<thead>
+<tr>
+<th align="center">十进制数</th>
+<th align="center">137 80 78 71 13 10 26 10</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">十六进制数</td>
+<td align="center">89 50 4E 47 0D 0A 1A 0A</td>
+</tr>
+</tbody></table>
+<p>其中第一个字节0x89超出了ASCII字符的范围，这是为了避免某些软件将PNG文件当做文本文件来处理。文件中剩余的部分由3个以上的PNG的数据块（Chunk）按照特定的顺序组成，因此，一个标准的PNG文件结构应该如下：</p>
+<ul>
+<li><p>PNG文件标志</p>
+</li>
+<li><p>PNG数据块 </p>
+</li>
+<li><p>……  </p>
+</li>
+<li><p>PNG数据块 </p>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<p><strong>PNG数据块（Chunk）</strong></p>
+<p>PNG定义了两种类型的数据块，一种是称为关键数据块(critical chunk)，这是标准的数据块，另一种叫做辅助数据块(ancillary chunks)，这是可选的数据块。关键数据块定义了4个标准数据块，每个PNG文件都必须包含它们，PNG读写软件也都必须要支持这些数据块。虽然PNG文件规范没有要求PNG编译码器对可选数据块进行编码和译码，但规范提倡支持可选数据块。</p>
+<p>下表就是PNG中数据块的类别，其中，关键数据块部分我们使用深色背景加以区分。</p>
+<table>
+<thead>
+<tr>
+<th><strong>PNG文件格式中的数据块</strong></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据块符号</strong></td>
+<td><strong>数据块名称</strong></td>
+<td><strong>多数据块</strong></td>
+<td><strong>可选否</strong></td>
+<td><strong>位置限制</strong></td>
+</tr>
+<tr>
+<td>IHDR</td>
+<td>文件头数据块</td>
+<td>否</td>
+<td>否</td>
+<td>第一块</td>
+</tr>
+<tr>
+<td>cHRM</td>
+<td>基色和白色点数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE和IDAT之前</td>
+</tr>
+<tr>
+<td>gAMA</td>
+<td>图像γ数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE和IDAT之前</td>
+</tr>
+<tr>
+<td>sBIT</td>
+<td>样本有效位数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE和IDAT之前</td>
+</tr>
+<tr>
+<td>PLTE</td>
+<td>调色板数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在IDAT之前</td>
+</tr>
+<tr>
+<td>bKGD</td>
+<td>背景颜色数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE之后IDAT之前</td>
+</tr>
+<tr>
+<td>hIST</td>
+<td>图像直方图数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE之后IDAT之前</td>
+</tr>
+<tr>
+<td>tRNS</td>
+<td>图像透明数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在PLTE之后IDAT之前</td>
+</tr>
+<tr>
+<td>oFFs</td>
+<td>(专用公共数据块)</td>
+<td>否</td>
+<td>是</td>
+<td>在IDAT之前</td>
+</tr>
+<tr>
+<td>pHYs</td>
+<td>物理像素尺寸数据块</td>
+<td>否</td>
+<td>是</td>
+<td>在IDAT之前</td>
+</tr>
+<tr>
+<td>sCAL</td>
+<td>(专用公共数据块)</td>
+<td>否</td>
+<td>是</td>
+<td>在IDAT之前</td>
+</tr>
+<tr>
+<td>IDAT</td>
+<td>图像数据块</td>
+<td>是</td>
+<td>否</td>
+<td>与其他IDAT连续</td>
+</tr>
+<tr>
+<td>tIME</td>
+<td>图像最后修改时间数据块</td>
+<td>否</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>tEXt</td>
+<td>文本信息数据块</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>zTXt</td>
+<td>压缩文本数据块</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>fRAc</td>
+<td>(专用公共数据块)</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>gIFg</td>
+<td>(专用公共数据块)</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>gIFt</td>
+<td>(专用公共数据块)</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>gIFx</td>
+<td>(专用公共数据块)</td>
+<td>是</td>
+<td>是</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>IEND</td>
+<td>图像结束数据</td>
+<td>否</td>
+<td>否</td>
+<td>最后一个数据块</td>
+</tr>
+</tbody></table>
+<p>为了简单起见，我们假设在我们使用的PNG文件中，这4个数据块按以上先后顺序进行存储，并且都只出现一次。</p>
+<p><strong>数据块结构</strong></p>
+<p>PNG文件中，每个数据块由4个部分组成，如下：</p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>字节数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Length (长度)</td>
+<td>4字节</td>
+<td>指定数据块中数据域的长度，其长度不超过(231－1)字节</td>
+</tr>
+<tr>
+<td>Chunk Type Code (数据块类型码)</td>
+<td>4字节</td>
+<td>数据块类型码由ASCII字母(A-Z和a-z)组成</td>
+</tr>
+<tr>
+<td>Chunk Data (数据块数据)</td>
+<td>可变长度</td>
+<td>存储按照Chunk Type Code指定的数据</td>
+</tr>
+<tr>
+<td>CRC (循环冗余检测)</td>
+<td>4字节</td>
+<td>存储用来检测是否有错误的循环冗余码</td>
+</tr>
+</tbody></table>
+<p>CRC(cyclic redundancy check)域中的值是对Chunk Type Code域和Chunk Data域中的数据进行计算得到的。CRC具体算法定义在ISO 3309和ITU-T V.42中，其值按下面的CRC码生成多项式进行计算：</p>
+<p>x^32^+x^26^+x^23^+x^22^+x^16^+x^12^+x^11^+x^10^+x^8^+x^7^+x^5^+x^4^+x^2^+x+1</p>
+<p>CRC: 一种校验算法。仅仅用来校验数据的正确性的</p>
+<p>下面，我们依次来了解一下各个关键数据块的结构吧。</p>
+<p><strong>IHDR</strong></p>
+<p>文件头数据块IHDR(header chunk)：它包含有PNG文件中存储的图像数据的基本信息，并要作为第一个数据块出现在PNG数据流中，而且一个PNG数据流中只能有一个文件头数据块。</p>
+<p>文件头数据块由13字节组成，它的格式如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th><strong>域的名称</strong></th>
+<th><strong>字节数</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Width</td>
+<td>4 bytes</td>
+<td>图像宽度，以像素为单位</td>
+</tr>
+<tr>
+<td>Height</td>
+<td>4 bytes</td>
+<td>图像高度，以像素为单位</td>
+</tr>
+<tr>
+<td>Bit depth</td>
+<td>1 byte</td>
+<td>图像深度：   索引彩色图像：1，2，4或8   灰度图像：1，2，4，8或16   真彩色图像：8或16</td>
+</tr>
+<tr>
+<td>ColorType</td>
+<td>1 byte</td>
+<td>颜色类型：  0：灰度图像, 1，2，4，8或16   2：真彩色图像，8或16   3：索引彩色图像，1，2，4或8   4：带α通道数据的灰度图像，8或16   6：带α通道数据的真彩色图像，8或16</td>
+</tr>
+<tr>
+<td>Compression method</td>
+<td>1 byte</td>
+<td>压缩方法(LZ77派生算法)</td>
+</tr>
+<tr>
+<td>Filter method</td>
+<td>1 byte</td>
+<td>滤波器方法</td>
+</tr>
+<tr>
+<td>Interlace method</td>
+<td>1 byte</td>
+<td>隔行扫描方法：  0：非隔行扫描   1： Adam7(由Adam M. Costello开发的7遍隔行扫描方法)</td>
+</tr>
+</tbody></table>
+<p>由于本文很多设计到了PNG在手机方面的应用，因此在此提出MIDP1.0对所使用PNG图片的要求：</p>
+<ul>
+<li>在MIDP1.0中，只可以使用1.0版本的PNG图片。</li>
+<li>文件大小：MIDP支持任意大小的PNG图片，然而实际上，如果一个图片过大，会由于内存耗尽而无法读取。</li>
+<li>颜色类型：所有颜色类型都有被支持，虽然这些颜色的显示依赖于实际设备的显示能力。同时，MIDP也能支持alpha通道，但是，所有的alpha通道信息都会被忽略并且当作不透明的颜色对待。</li>
+<li>色深：所有的色深都能被支持。</li>
+<li>压缩方法：仅支持deflate压缩方式，这和jar文件的压缩方式完全相同，所以，PNG图片数据的解压和jar文件的解压可以使用相同的代码。</li>
+<li>滤波器方法：在PNG中所有的5种方法都被支持。</li>
+<li>隔行扫描：虽然MIDP支持0、1两种方式，然而，当使用隔行扫描时，MIDP却不会真正的使用隔行扫描方式来显示。</li>
+<li>PLTE chunk：支持</li>
+<li>IDAT chunk：图像信息必须使用5种过滤方式中的方式之一 (None, Sub, Up, Average, Paeth)</li>
+<li>IEND chunk：当IEND数据块被找到时，这个PNG图像才认为是合法的PNG图像。</li>
+<li>可选数据块：MIDP可以支持下列辅助数据块，然而，这却不是必须的。</li>
+</ul>
+<p>bKGD cHRM gAMA hIST iCCP iTXt pHYs<br> sBIT sPLT sRGB tEXt tIME tRNS zTXt</p>
+<p><strong>PLTE</strong></p>
+<p>调色板数据块PLTE(palette chunk)包含有与索引彩色图像(indexed-color image)相关的彩色变换数据，它仅与索引彩色图像有关，而且要放在图像数据块(image data chunk)之前。</p>
+<p>PLTE数据块是定义图像的调色板信息，PLTE可以包含1~256个调色板信息，每一个调色板信息由3个字节组成：</p>
+<table>
+<thead>
+<tr>
+<th><strong>颜色</strong></th>
+<th><strong>字节</strong></th>
+<th><strong>意义</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Red</td>
+<td>1 byte</td>
+<td>0 = 黑色, 255 = 红</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>1 byte</td>
+<td>0 = 黑色, 255 = 绿色</td>
+</tr>
+<tr>
+<td>Blue</td>
+<td>1 byte</td>
+<td>0 = 黑色, 255 = 蓝色</td>
+</tr>
+</tbody></table>
+<p>因此，调色板的长度应该是3的倍数，否则，这将是一个非法的调色板。</p>
+<p>对于索引图像，调色板信息是必须的，调色板的颜色索引从0开始编号，然后是1、2……，调色板的颜色数不能超过色深中规定的颜色数（如图像色深为4的时候，调色板中的颜色数不可以超过2^4=16），否则，这将导致PNG图像不合法。</p>
+<p>真彩色图像和带alpha通道数据的真彩色图像也可以有调色板数据块，目的是便于非真彩色显示程序用它来量化图像数据，从而显示该图像。</p>
+<p><strong>IDAT</strong></p>
+<p>图像数据块IDAT(image data chunk)：它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。</p>
+<p>IDAT存放着图像真正的数据信息，因此，如果能够了解IDAT的结构，我们就可以很方便的生成PNG图像。</p>
+<p><strong>IEND</strong></p>
+<p>图像结束数据IEND(image trailer chunk)：它用来标记PNG文件或者数据流已经结束，并且必须要放在文件的尾部。</p>
+<p>如果我们仔细观察PNG文件，我们会发现，文件的结尾12个字符看起来总应该是这样的：</p>
+<p>00 00 00 00 49 45 4E 44 AE 42 60 82</p>
+<p>不难明白，由于数据块结构的定义，IEND数据块的长度总是0（00 00 00 00，除非人为加入信息），数据标识总是IEND（49 45 4E 44），因此，CRC码也总是AE 42 60 82。</p>
+<hr>
+<p><strong>实例研究PNG</strong></p>
+<p>以下是由Fireworks生成的一幅图像，图像大小为8*8，</p>
+<p>为了方便观看，将图像放大：</p>
+<p> 使用UltraEdit32打开该文件，如下：<br><strong>00000000~00000007：</strong></p>
+<p>可以看到，选中的头8个字节即为PNG文件的标识。</p>
+<p>接下来的地方就是IHDR数据块了：</p>
+<p><strong>00000008~00000020：</strong></p>
+<ul>
+<li>00 00 00 0D 说明IHDR头块长为13</li>
+<li>49 48 44 52 IHDR标识</li>
+<li>00 00 00 08 图像的宽，8像素</li>
+<li>00 00 00 08 图像的高，8像素</li>
+<li>04 色深，2^4=16，即这是一个16色的图像（也有可能颜色数不超过16，当然，如果颜色数不超过8，用03表示更合适）</li>
+<li>03 颜色类型，索引图像</li>
+<li>00 PNG Spec规定此处总为0（非0值为将来使用更好的压缩方法预留），表示使压缩方法(LZ77派生算法)</li>
+<li>00 同上</li>
+<li>00 非隔行扫描</li>
+<li>36 21 A3 B8 CRC校验</li>
+</ul>
+<p><strong>00000021~0000002F：</strong></p>
+<p>可选数据块sBIT，颜色采样率，RGB都是256（2^8=256）</p>
+<p><strong>00000030~00000062：</strong></p>
+<p>这里是调色板信息</p>
+<ul>
+<li>00 00 00 27 说明调色板数据长为39字节，既13个颜色数</li>
+<li>50 4C 54 45 PLTE标识</li>
+<li>FF FF 00 颜色0</li>
+<li>FF ED 00 颜色1</li>
+<li>…… ……</li>
+<li>09 00 B2 最后一个颜色，12</li>
+<li>5F F5 BB DD CRC校验</li>
+</ul>
+<p><strong>00000063~000000C5：</strong></p>
+<p>这部分包含了pHYs、tExt两种类型的数据块共3块，由于并不太重要，因此也不再详细描述了。</p>
+<p><strong>000000C0~000000F8：</strong></p>
+<p>以上选中部分是IDAT数据块</p>
+<ul>
+<li>00 00 00 27 数据长为39字节</li>
+<li>49 44 41 54 IDAT标识</li>
+<li>78 9C…… 压缩的数据，LZ77派生压缩方法</li>
+<li>DA 12 06 A5 CRC校验</li>
+</ul>
+<p>IDAT中压缩数据部分在后面会有详细的介绍。</p>
+<p><strong>000000F9~00000104：</strong></p>
+<p>IEND数据块，这部分正如上所说，通常都应该是</p>
+<p>00 00 00 00 49 45 4E 44 AE 42 60 82</p>
+<p>至此，我们已经能够从一个PNG文件中识别出各个数据块了。由于PNG中规定除关键数据块外，其它的辅助数据块都为可选部分，因此，有了这个标准后，我们可以通过删除所有的辅助数据块来减少PNG文件的大小。（当然，需要注意的是，PNG格式可以保存图像中的层、文字等信息，一旦删除了这些辅助数据块后，图像将失去原来的可编辑性。）</p>
+<p>删除了辅助数据块后的PNG文件，现在文件大小为147字节，原文件大小为261字节，文件大小减少后，并不影响图像的内容。</p>
+<ul>
+<li>如上说过，IDAT数据块是使用了LZ77压缩算法生成的，由于受限于手机处理器</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #66ccff;font-size:14px;">-EOF-</div>
+    
+</div>
+      
+      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%90%E5%86%99/" rel="tag"># 隐写</a>
+              <a href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag"># 基础</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/" rel="next" title="xxd - make a hex dump or do the  reverse">
+      xxd - make a hex dump or do the  reverse <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="NoahTie"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">NoahTie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/noahtie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;noahtie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:noahtie@foxmail.com" title="E-Mail → mailto:noahtie@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NoahTie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="1.5" zIndex="3" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
