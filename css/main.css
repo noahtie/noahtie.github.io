@@ -1198,7 +1198,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #a3a7ff;
+  background: #f2ff59;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2232,7 +2232,7 @@ hr {
   }
 }
 #veditor {
-  background-image: url("/images/sora.png");
+  background-image: url("https://ftp.bmp.ovh/imgs/2020/09/18cb4a67e2575448.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right;
@@ -2444,7 +2444,7 @@ hr {
 }
 @media screen {
   body {
-    background: url("/images/background.jpg");
+    background: url("https://ftp.bmp.ovh/imgs/2020/09/124a2686b1f3e0f8.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 50% 50%;
