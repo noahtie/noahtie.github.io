@@ -94,66 +94,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CTF中的图片隐写</title>
-    <url>/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
-    <content><![CDATA[<ol>
-<li><p>所有图片通用方法</p>
-<ul>
-<li><p>Stegosolve查看是否颜色通道隐写</p>
-</li>
-<li><p>UE查看内嵌字符串</p>
-</li>
-<li><p>Exiftool查看Exif信息</p>
-</li>
-<li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p>
-</li>
-<li><p>binwalk查看是否有包含其他文件</p>
-</li>
-</ul>
-</li>
-</ol>
-<a id="more"></a>
-
-<ul>
-<li><p>foremost分离包含文件</p>
-</li>
-<li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li>
-<li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p>
-</li>
-</ul>
-<ol start="2">
-<li><p>png文件</p>
-<ul>
-<li>pngcheck</li>
-<li>修改文件头以改变图片高度、宽度</li>
-<li>zsteg</li>
-</ul>
-</li>
-<li><p>gif文件</p>
-<ul>
-<li>Namo Gif Animator分离帧</li>
-</ul>
-</li>
-<li><p>bmp</p>
-<ul>
-<li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>做题套路</category>
-      </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>图片</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PNG文件结构</title>
     <url>/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<p>根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：</p>
@@ -541,59 +481,6 @@
       </tags>
   </entry>
   <entry>
-    <title>xxd - make a hex dump or do the  reverse</title>
-    <url>/2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/</url>
-    <content><![CDATA[<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xxd -h</span><br><span class="line">xxd [options][infile[outfile]]</span><br><span class="line">xxd -r [options][infile[outfile]]</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p><code>-b</code>:以2进制格式输出</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -b train.ini</span></span><br><span class="line">0000000: 01011011 01110100 01110010 01100001 01101001 01101110  [train</span><br><span class="line">0000006: 01011101 00001101 00001010 01101110 01100111 01110010  ]..ngr</span><br><span class="line">000000c: 01100001 01101101 01100110 01101001 01101100 01100101  amfile</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-<a id="more"></a>
-
-<ol start="2">
-<li><p><code>-c</code>:每行输出多少个字节</p>
- <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -c4 train.ini</span></span><br><span class="line">0000000: 5b74 7261  [tra</span><br><span class="line">0000004: 696e 5d0d  in].</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-g</code>:几个字节组成一组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -g4 train.ini</span></span><br><span class="line">0000000: 5b747261 696e5d0d 0a6e6772 616d6669  [train]..ngramfi</span><br><span class="line">0000010: 6c653d22 6e675f32 772e7478 74220d0a  le=&quot;ng_2w.txt&quot;..</span><br><span class="line">0000020: 69746572 636f756e 743d3430 30300d0a  itercount=4000..</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-i</code>:将文件内容输出成 c的一个数组格式</p>
- <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -i train.ini</span></span><br><span class="line">unsigned char train_ini[] = &#123;</span><br><span class="line">0x5b, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x5d, 0x0d, 0x0a, 0x6e, 0x67, 0x72,</span><br><span class="line">0x61, 0x6d, 0x66, 0x69, 0x6c, 0x65, 0x3d, 0x22, 0x6e, 0x67, 0x5f, 0x32,</span><br><span class="line"> &#125;;</span><br><span class="line"> unsigned int train_ini_len = 148;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-l</code>:输出几个字节后结束</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -l12 train.ini</span></span><br><span class="line">0000000: 5b74 7261 696e 5d0d 0a6e 6772            [train]..ngr</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-p</code>：以一个整块输出所有的hex， 不使用空格进行分割</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -p train.ini</span></span><br><span class="line">5b747261696e5d0d0a6e6772616d66696c653d226e675f32772e74787422</span><br><span class="line">0d0a69746572636f756e743d343030300d0a73766d6761703d302e303030</span><br><span class="line">310d0a74656d706469723d2274656d70220d0a7664636c6973743d227664</span><br><span class="line">632e7478742220204f520d0a77686974656c6973743d2277686974652e6c</span><br><span class="line">697374220d0a626c61636b6c6973743d22626c61636b2e6c69737422</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>-r</code>:反转操作，将16进制转为2进制</p>
-</li>
-<li><p><code>-s [+][-]seek</code>:从第几个字符开始</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -s5 train.ini</span></span><br><span class="line">0000005: 6e5d 0d0a 6e67 7261 6d66 696c 653d 226e  n]..ngramfile=&quot;n</span><br><span class="line">0000015: 675f 3277 2e74 7874 220d 0a69 7465 7263  g_2w.txt&quot;..iterc</span><br><span class="line">0000025: 6f75 6e74 3d34 3030 300d 0a73 766d 6761  ount=4000..svmga</span><br></pre></td></tr></table></figure></li>
-<li><p><code>-u</code>:输出采用大写</p>
-</li>
-</ol>
-<h1 id="rev"><a href="#rev" class="headerlink" title="rev"></a><strong>rev</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# cat iptables.bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> Generated by iptables-save v1.3.5 on Thu Dec 26 21:25:15 2013</span></span><br><span class="line">*filter</span><br><span class="line">:INPUT DROP [48113:2690676]</span><br><span class="line">:FORWARD accept [0:0]</span><br><span class="line">:OUTPUT ACCEPT [3381959:1818595115]</span><br><span class="line">-A INPUT -i lo -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p icmp -j ACCEPT</span><br><span class="line">-A OUTPUT -o lo -j ACCEPT</span><br><span class="line">COMMIT</span><br><span class="line"><span class="meta">#</span><span class="bash"> Completed on Thu Dec 26 21:25:15 2013</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rev iptables.bak    </span><br><span class="line">3102 51:52:12 62 ceD uhT no 5.3.1v evas-selbatpi yb detareneG #</span><br><span class="line">retlif*</span><br><span class="line">]6760962:31184[ PORD TUPNI:</span><br><span class="line">]0:0[ TPECCA DRAWROF:</span><br><span class="line">]5115958181:9591833[ TPECCA TUPTUO:</span><br><span class="line"> TPECCA j- ol i- TUPNI A-</span><br><span class="line"> TPECCA j- 22 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- 08 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- DEHSILBATSE,DETALER etats-- etats m- TUPNI A-</span><br><span class="line"> TPECCA j- pmci p- TUPNI A-</span><br><span class="line"> TPECCA j- ol o- TUPTUO A-</span><br><span class="line">TIMMOC</span><br><span class="line">3102 51:52:12 62 ceD uhT no detelpmoC #</span><br></pre></td></tr></table></figure>
-
-<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a><strong>tr</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tr -c -d -s [&quot;string1_to_translate_from&quot;] [&quot;string2_to_translate_to&quot;] &lt; input-file</span><br></pre></td></tr></table></figure>
-
-<p><code>-c</code> 用字符串1中字符集的补集替换此字符集，要求字符集为ASCII。<br><code>-d</code> 删除字符串1中所有输入字符。<br><code>-s</code> 删除所有重复出现字符序列，只保留第一个；即将重复出现字符串压缩为一个字符串。<br><code>input-file</code>是转换文件名。虽然可以使用其他格式输入，但这种格式最常用。</p>
-<p><strong>字符范围</strong><br>    指定字符串1或字符串2的内容时，只能使用单字符或字符串范围或列表。<br>    <code>[a-z]</code> a-z内的字符组成的字符串。<br>    <code>[A-Z]</code> A-Z内的字符组成的字符串。<br>    <code>[0-9]</code> 数字串。<br>    <code>\octal</code> 一个三位的八进制数，对应有效的ASCII字符。<br>    <code>[O*n] </code>表示字符O重复出现指定次数n。因此<code>[O*2]</code>匹配<code>OO</code>的字符串。</p>
-<p><strong>tr中特定控制字符的不同表达方式</strong><br>    速记符含义八进制方式<br>    <code>\a</code> Ctrl-G 铃声\007<br>    <code>\b</code> Ctrl-H 退格符\010<br>    <code>\f</code> Ctrl-L 走行换页\014<br>    <code>\n</code> Ctrl-J 新行\012<br>    <code>\r</code> Ctrl-M 回车\015<br>    <code>\t </code> Ctrl-I tab键\011<br>    <code>\v  </code> Ctrl-X \030</p>
-]]></content>
-      <categories>
-        <category>CTF</category>
-      </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>工具使用</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CISCN 2019 web_bilibili</title>
     <url>/2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/</url>
     <content><![CDATA[<h1 id="CISCN-2019-web-bilibili"><a href="#CISCN-2019-web-bilibili" class="headerlink" title="CISCN 2019 web_bilibili"></a>CISCN 2019 web_bilibili</h1><h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h2><p><a href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3</a></p>
@@ -652,6 +539,119 @@
       <tags>
         <tag>CTF</tag>
         <tag>攻防世界</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTF中的图片隐写</title>
+    <url>/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
+    <content><![CDATA[<ol>
+<li><p>所有图片通用方法</p>
+<ul>
+<li><p>Stegosolve查看是否颜色通道隐写</p>
+</li>
+<li><p>UE查看内嵌字符串</p>
+</li>
+<li><p>Exiftool查看Exif信息</p>
+</li>
+<li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p>
+</li>
+<li><p>binwalk查看是否有包含其他文件</p>
+</li>
+</ul>
+</li>
+</ol>
+<a id="more"></a>
+
+<ul>
+<li><p>foremost分离包含文件</p>
+</li>
+<li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li>
+<li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>png文件</p>
+<ul>
+<li>pngcheck</li>
+<li>修改文件头以改变图片高度、宽度</li>
+<li>zsteg</li>
+</ul>
+</li>
+<li><p>gif文件</p>
+<ul>
+<li>Namo Gif Animator分离帧</li>
+</ul>
+</li>
+<li><p>bmp</p>
+<ul>
+<li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>做题套路</category>
+      </categories>
+      <tags>
+        <tag>隐写</tag>
+        <tag>图片</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>xxd - make a hex dump or do the  reverse</title>
+    <url>/2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/</url>
+    <content><![CDATA[<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xxd -h</span><br><span class="line">xxd [options][infile[outfile]]</span><br><span class="line">xxd -r [options][infile[outfile]]</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><code>-b</code>:以2进制格式输出</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -b train.ini</span></span><br><span class="line">0000000: 01011011 01110100 01110010 01100001 01101001 01101110  [train</span><br><span class="line">0000006: 01011101 00001101 00001010 01101110 01100111 01110010  ]..ngr</span><br><span class="line">000000c: 01100001 01101101 01100110 01101001 01101100 01100101  amfile</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<a id="more"></a>
+
+<ol start="2">
+<li><p><code>-c</code>:每行输出多少个字节</p>
+ <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -c4 train.ini</span></span><br><span class="line">0000000: 5b74 7261  [tra</span><br><span class="line">0000004: 696e 5d0d  in].</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>-g</code>:几个字节组成一组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -g4 train.ini</span></span><br><span class="line">0000000: 5b747261 696e5d0d 0a6e6772 616d6669  [train]..ngramfi</span><br><span class="line">0000010: 6c653d22 6e675f32 772e7478 74220d0a  le=&quot;ng_2w.txt&quot;..</span><br><span class="line">0000020: 69746572 636f756e 743d3430 30300d0a  itercount=4000..</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>-i</code>:将文件内容输出成 c的一个数组格式</p>
+ <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -i train.ini</span></span><br><span class="line">unsigned char train_ini[] = &#123;</span><br><span class="line">0x5b, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x5d, 0x0d, 0x0a, 0x6e, 0x67, 0x72,</span><br><span class="line">0x61, 0x6d, 0x66, 0x69, 0x6c, 0x65, 0x3d, 0x22, 0x6e, 0x67, 0x5f, 0x32,</span><br><span class="line"> &#125;;</span><br><span class="line"> unsigned int train_ini_len = 148;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>-l</code>:输出几个字节后结束</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -l12 train.ini</span></span><br><span class="line">0000000: 5b74 7261 696e 5d0d 0a6e 6772            [train]..ngr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>-p</code>：以一个整块输出所有的hex， 不使用空格进行分割</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -p train.ini</span></span><br><span class="line">5b747261696e5d0d0a6e6772616d66696c653d226e675f32772e74787422</span><br><span class="line">0d0a69746572636f756e743d343030300d0a73766d6761703d302e303030</span><br><span class="line">310d0a74656d706469723d2274656d70220d0a7664636c6973743d227664</span><br><span class="line">632e7478742220204f520d0a77686974656c6973743d2277686974652e6c</span><br><span class="line">697374220d0a626c61636b6c6973743d22626c61636b2e6c69737422</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>-r</code>:反转操作，将16进制转为2进制</p>
+</li>
+<li><p><code>-s [+][-]seek</code>:从第几个字符开始</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xxd -s5 train.ini</span></span><br><span class="line">0000005: 6e5d 0d0a 6e67 7261 6d66 696c 653d 226e  n]..ngramfile=&quot;n</span><br><span class="line">0000015: 675f 3277 2e74 7874 220d 0a69 7465 7263  g_2w.txt&quot;..iterc</span><br><span class="line">0000025: 6f75 6e74 3d34 3030 300d 0a73 766d 6761  ount=4000..svmga</span><br></pre></td></tr></table></figure></li>
+<li><p><code>-u</code>:输出采用大写</p>
+</li>
+</ol>
+<h1 id="rev"><a href="#rev" class="headerlink" title="rev"></a><strong>rev</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# cat iptables.bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> Generated by iptables-save v1.3.5 on Thu Dec 26 21:25:15 2013</span></span><br><span class="line">*filter</span><br><span class="line">:INPUT DROP [48113:2690676]</span><br><span class="line">:FORWARD accept [0:0]</span><br><span class="line">:OUTPUT ACCEPT [3381959:1818595115]</span><br><span class="line">-A INPUT -i lo -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p icmp -j ACCEPT</span><br><span class="line">-A OUTPUT -o lo -j ACCEPT</span><br><span class="line">COMMIT</span><br><span class="line"><span class="meta">#</span><span class="bash"> Completed on Thu Dec 26 21:25:15 2013</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rev iptables.bak    </span><br><span class="line">3102 51:52:12 62 ceD uhT no 5.3.1v evas-selbatpi yb detareneG #</span><br><span class="line">retlif*</span><br><span class="line">]6760962:31184[ PORD TUPNI:</span><br><span class="line">]0:0[ TPECCA DRAWROF:</span><br><span class="line">]5115958181:9591833[ TPECCA TUPTUO:</span><br><span class="line"> TPECCA j- ol i- TUPNI A-</span><br><span class="line"> TPECCA j- 22 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- 08 tropd-- pct m- pct p- TUPNI A-</span><br><span class="line"> TPECCA j- DEHSILBATSE,DETALER etats-- etats m- TUPNI A-</span><br><span class="line"> TPECCA j- pmci p- TUPNI A-</span><br><span class="line"> TPECCA j- ol o- TUPTUO A-</span><br><span class="line">TIMMOC</span><br><span class="line">3102 51:52:12 62 ceD uhT no detelpmoC #</span><br></pre></td></tr></table></figure>
+
+<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a><strong>tr</strong></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tr -c -d -s [&quot;string1_to_translate_from&quot;] [&quot;string2_to_translate_to&quot;] &lt; input-file</span><br></pre></td></tr></table></figure>
+
+<p><code>-c</code> 用字符串1中字符集的补集替换此字符集，要求字符集为ASCII。<br><code>-d</code> 删除字符串1中所有输入字符。<br><code>-s</code> 删除所有重复出现字符序列，只保留第一个；即将重复出现字符串压缩为一个字符串。<br><code>input-file</code>是转换文件名。虽然可以使用其他格式输入，但这种格式最常用。</p>
+<p><strong>字符范围</strong><br>    指定字符串1或字符串2的内容时，只能使用单字符或字符串范围或列表。<br>    <code>[a-z]</code> a-z内的字符组成的字符串。<br>    <code>[A-Z]</code> A-Z内的字符组成的字符串。<br>    <code>[0-9]</code> 数字串。<br>    <code>\octal</code> 一个三位的八进制数，对应有效的ASCII字符。<br>    <code>[O*n] </code>表示字符O重复出现指定次数n。因此<code>[O*2]</code>匹配<code>OO</code>的字符串。</p>
+<p><strong>tr中特定控制字符的不同表达方式</strong><br>    速记符含义八进制方式<br>    <code>\a</code> Ctrl-G 铃声\007<br>    <code>\b</code> Ctrl-H 退格符\010<br>    <code>\f</code> Ctrl-L 走行换页\014<br>    <code>\n</code> Ctrl-J 新行\012<br>    <code>\r</code> Ctrl-M 回车\015<br>    <code>\t </code> Ctrl-I tab键\011<br>    <code>\v  </code> Ctrl-X \030</p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+      </categories>
+      <tags>
+        <tag>隐写</tag>
+        <tag>工具使用</tag>
       </tags>
   </entry>
 </search>
