@@ -1844,4 +1844,183 @@
         <tag>PHP</tag>
       </tags>
   </entry>
+  <entry>
+    <title>优雅地使用 minecraft 官方 server + PCL2 联机游戏</title>
+    <url>/2021/09/14/%E4%BC%98%E9%9B%85%E5%9C%B0%E4%BD%BF%E7%94%A8%20minecraft%20%E5%AE%98%E6%96%B9%20server%20+%20PCL2%20%E8%81%94%E6%9C%BA%E6%B8%B8%E6%88%8F/</url>
+    <content><![CDATA[<h1 id="优雅地使用-minecraft-官方-server-PCL2-联机游戏"><a href="#优雅地使用-minecraft-官方-server-PCL2-联机游戏" class="headerlink" title="优雅地使用 minecraft 官方 server + PCL2 联机游戏"></a>优雅地使用 <code>minecraft</code> 官方 server + <code>PCL2</code> 联机游戏</h1><p>最近学了《数字电路与逻辑分析》，想起来去年某学长考试前靠 MC 的红石电路复习，然后，本着<del>学习数电</del>摸鱼的目的，搭了一个 MC 的服务器（便于大家交流学习（逃</p>
+<span id="more"></span>
+
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p><font style="color: white; background-color: #B10DC9"> 如果你是玩家，请直接查看<a href="#客户端">客户端</a>部分。这部分雨女无瓜。</font></p>
+<hr>
+<h3 id="0x0-服务器"><a href="#0x0-服务器" class="headerlink" title="0x0 服务器"></a>0x0 服务器</h3><p>首先你需要一台云服务器，各种云服务器供应商都可以（当然，前提是没有被伟大的 <code>GWF</code> 拦截，<code>Amazon AWS</code> 似乎不行）。<br>本人使用的是腾讯云的轻量型应用服务器，配置如下供参考：</p>
+<table>
+<thead>
+<tr>
+<th align="center">项目</th>
+<th align="center">配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OS</td>
+<td align="center">Debian 10 buster</td>
+</tr>
+<tr>
+<td align="center">CPU</td>
+<td align="center">Intel Xeon Platinum 8255C @ 2x 2.494GHz</td>
+</tr>
+<tr>
+<td align="center">RAM</td>
+<td align="center">4G</td>
+</tr>
+<tr>
+<td align="center">ROM</td>
+<td align="center">80G SSD</td>
+</tr>
+<tr>
+<td align="center">带宽</td>
+<td align="center">8M</td>
+</tr>
+</tbody></table>
+<p>对于 <code>minecraft</code> 服务端的搭建而言，服务器配置的重要程度大致为： <code>公网带宽</code> &gt; <code>CPU</code> &gt; <code>RAM</code>  &gt; <code>ROM</code>。<br>我的服务器在跑服务端正常游戏的时候，系统占用基本上 CPU 20%， 内存 2GB， 带宽占用取决于游戏人数，基本上每人 1M 左右。</p>
+<hr>
+<h3 id="0x1-服务器配置"><a href="#0x1-服务器配置" class="headerlink" title="0x1 服务器配置"></a>0x1 服务器配置</h3><blockquote>
+<p>我是用的镜像是腾讯云提供的 <code>Debian 10.2 64bit</code> 系统镜像，接下来的操作均在该系统上。<br>使用其他操作系统的情况下，部分步骤可能会有所不同。</p>
+</blockquote>
+<h4 id="0x1-1-服务器账户配置"><a href="#0x1-1-服务器账户配置" class="headerlink" title="0x1.1 服务器账户配置"></a>0x1.1 服务器账户配置</h4><p><code>Mojang</code> 官方推荐的服务器搭建教程建议使用 <code>root</code> 账户并将 <code>minecraft</code> 的服务器本体 <code>server.jar</code> 及配置文件放置在 <code>/opt</code> 目录下，但由于我不是很喜欢直接用 root 账户，所以我选择使用普通用户 <code>noah</code> 并将文件放置在 <code>/home/noah/minecraft</code> 目录下。并没有遇到什么问题。</p>
+<blockquote>
+<p>如果你想使用 <code>root</code> 账户搭建服务端，直接跳到 <a href="#0x2-安装OpenJDK">0x2 安装 Openjdk</a>。</p>
+</blockquote>
+<p>首先添加一个新的账户：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">groupadd noah</span><br><span class="line">useradd -m noah -g noah -s /bin/bash -d /home/noah</span><br><span class="line">passwd noah</span><br></pre></td></tr></table></figure>
+
+<p>更新软件源、安装vim并赋予新用户sudo权限：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt upgrade</span><br><span class="line">apt update</span><br><span class="line">apt install vim</span><br><span class="line">vim /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>sudoers</code> 中添加一行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">noah	ALL(=ALL)	ALL</span><br></pre></td></tr></table></figure>
+
+<p>接着切换到新的用户：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su noah</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="0x1-2-安装-screen"><a href="#0x1-2-安装-screen" class="headerlink" title="0x1.2 安装 screen"></a>0x1.2 安装 <code>screen</code></h4><blockquote>
+<p><code>GNU Screen</code> 是一款由 GNU 计划开发的用于命令行终端切换的自由软件。用户可以通过该软件同时连接多个本地或远程的命令行会话，并在其间自由切换。<br><code>GNU Screen</code> 可以看作是窗口管理器的命令行界面版本。它提供了统一的管理多个会话的界面和相应的功能。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install screen</span><br></pre></td></tr></table></figure>
+
+<p>在运行 <code>minecraft server</code> 的时候会用到 <code>screen</code>。</p>
+<h4 id="0x1-3安装一个更好看的shell"><a href="#0x1-3安装一个更好看的shell" class="headerlink" title="0x1.3安装一个更好看的shell"></a>0x1.3安装一个更好看的shell</h4><p>我个人喜欢用 <code>fish</code>， <code>zsh</code> 运行有些慢。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install fish</span><br><span class="line">chsh -s /usr/bin/fish</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="0x2-安装OpenJDK"><a href="#0x2-安装OpenJDK" class="headerlink" title="0x2 安装OpenJDK"></a>0x2 安装OpenJDK</h3><blockquote>
+<p><code>Debian 10</code> 的默认 <code>JDK</code> 版本为 <code>OpenJDK 11</code>， 对于<code> minecraft server 1.17.1</code> 及以上的版本，需要使用 <code>OpenJDK 16</code> 及以上的版本。</p>
+</blockquote>
+<p>安装通过 HTTPS 添加新存储库所需的依赖项：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install apt-transport-https ca-certificates wget dirmngr gnupg software-properties-common</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>wget</code> 命令导入存储库的 GPG 密钥：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -</span><br></pre></td></tr></table></figure>
+
+<p>添加 <code>AdoptOpenJDK APT</code> 存储库到你的系统：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/</span><br></pre></td></tr></table></figure>
+
+<p>更新 <code>apt</code> 源软件列表，启用存储库，安装 <code>OpenJDK 16</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install adoptopenjdk-16-hotspot</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="0x3-下载、启动并配置-minecraft-server"><a href="#0x3-下载、启动并配置-minecraft-server" class="headerlink" title="0x3 下载、启动并配置 minecraft server"></a>0x3 下载、启动并配置 minecraft server</h3><h4 id="官方版-server"><a href="#官方版-server" class="headerlink" title="官方版 server"></a>官方版 server</h4><p>下载官方的 <code>server.jar</code>，最新版本的下载地址可以在 <a href="https://www.minecraft.net/zh-hans/download/server">Download server for Minecraft | Minecraft</a> 找到：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar</span><br></pre></td></tr></table></figure>
+
+<p>但是在国内下载的话速度有点慢，可以挂代理下载或者本机下好之后传到服务器上。</p>
+<p>我将 <code>server.jar</code> 放在了 <code>/home/noah/minecraft</code> 目录下，这里将来还会生成数个配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /home/noah/minecraft</span><br><span class="line">mv server.jar /home/noah/minecraft</span><br><span class="line">cd /home/noah/minecraft</span><br></pre></td></tr></table></figure>
+
+<p>为了方便运行，在这里新建一个 shell 脚本，并赋予它可执行权限：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim run.sh</span><br><span class="line">chmod +x run.sh</span><br></pre></td></tr></table></figure>
+
+<p>并将以下内容写入脚本：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="built_in">cd</span> <span class="string">&quot;<span class="subst">$(dirname <span class="string">&quot;<span class="variable">$0</span>&quot;</span>)</span>&quot;</span></span><br><span class="line"><span class="built_in">exec</span> java -Xms1G -Xmx1G -jar server.jar --nogui</span><br></pre></td></tr></table></figure>
+
+<p>运行一次 server 以生成配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./run.sh</span><br></pre></td></tr></table></figure>
+
+<p>这次运行会因为未同意 <code>eula</code> 而异常退出。修改当前目录下生成的 <code>eula.txt</code> 文件，将其中的 <code>eula=false</code> 改为 <code>eula=true</code>。</p>
+<p>接着再运行一次 server， 等出现 <code>[Server thread/INFO]: Done (39.937s)! For help, type &quot;help&quot;</code> 的提示时 server 就算第一次正常运行了。第一次启动 server 耗时较长（大约 60 秒，具体取决于服务器的 CPU 配置），并且在启动的过程中会出现连续的许多 <code>[Worker-Main-2/INFO]: Preparing spawn area: 0%</code> 提示，这是正常情况。</p>
+<p>输入 <code>stop</code> 终止 server 运行，此时，目录下应该存在以下文件：</p>
+<p><img src="https://i.loli.net/2021/09/07/yLMbuldmxPrjZKH.png" alt="image-20210907232928633"></p>
+<p>修改配置文件 <code>server.properties</code>，其中需要修改的有：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">motd=Noah Minecraft Server # 服务器名称，不能带有部分特殊符号</span><br><span class="line">online-mode=false          # 是否验证正版，false为不验证，true为验证</span><br></pre></td></tr></table></figure>
+
+<p>其余的配置可以在控制台或游戏内通过 <code>op</code> 指令修改。</p>
+<p>通过在控制台输入 <code>op NoahTie</code> 设置 <code>op</code> (游戏内管理员)。将其中的 <code>NoahTie</code> 替换为你将要在游戏中使用的用户名。</p>
+<h4 id="Forge-版-server"><a href="#Forge-版-server" class="headerlink" title="Forge 版  server"></a>Forge 版  server</h4><p><font style="color: white; background-color: red">建议没有 Forge 使用经验的用户使用下面的 Fabric 版 server</font></p>
+<p>下载 <code>Forge Installer</code>： <a href="https://files.minecraftforge.net/net/minecraftforge/forge/">Downloads for Minecraft Forge for Minecraft</a></p>
+<p>将 <code>Forge Installer</code> 放在安装目录下，并执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo java -jar forge-1.17.1-installer.jar nogui --installServer</span><br></pre></td></tr></table></figure>
+
+<p>运行一次 universal 版本，参照 官方版 server 修改 <code>eula.txt</code> 及 <code>server.properties</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -jar forge-1.17.1-universal.jar nogui</span><br></pre></td></tr></table></figure>
+
+<p>新建 shell 脚本并写入以下内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">java -server -d64 -Xms1150M -Xmx1150M -Xss228k -XX:NewSize=150m -XX:MaxNewSize=200m -XX:+UseParNewGC -XX:+CMSIncrementalPacing -XX:+UseFastAccessorMethods -XX:+UseConcMarkSweepGC -XX:MaxGCPauseMillis=100 -XX:+CMSParallelRemarkEnabled -XX:ParallelGCThreads=4 -jar forge-1.17.1-37.0.53.jar nogui</span><br></pre></td></tr></table></figure>
+
+<p>添加 mod 时，需要将 mod 文件放入 <code>/home/noah/minecraft/mod</code> 目录中，客户端需要安装相同版本的 <code>Forge</code> 和 mod 才能连接服务器。</p>
+<h4 id="Fabric-版-server"><a href="#Fabric-版-server" class="headerlink" title="Fabric 版 server"></a>Fabric 版 server</h4><p>下载 <code>fabric installer</code> 并运行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget -O fabric-installer-0.7.4.jar https://maven.fabricmc.net/net/fabricmc/fabric-installer/0.7.4/fabric-installer-0.7.4.jar</span><br><span class="line">sudo java -jar ./fabric-installer-0.7.4.jar server -downloadMinecraft</span><br></pre></td></tr></table></figure>
+
+<p>稍作等待即可完成安装，此时目录下应该有 <code>fabric-server-launcher.jar</code> 文件，运行它：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -jar fabric-server-launcher.jar</span><br></pre></td></tr></table></figure>
+
+<p>这次运行会因为未同意 <code>eula</code> 而异常退出。修改当前目录下生成的 <code>eula.txt</code> 文件，将其中的 <code>eula=false</code> 改为 <code>eula=true</code>。</p>
+<p>再次运行，会生成配置文件。参照 <strong>官方版 server</strong> 中的方法，修改 <code>server.properties</code> 文件。文件夹中应该有以下文件。</p>
+<p>安装 mod 时只需要将 <code>jar</code> 文件放进 <code>mods</code> 目录即可。</p>
+<p><img src="https://i.loli.net/2021/09/09/XrdOxtMugawjnef.png" alt="image-20210909174753155"></p>
+<hr>
+<h3 id="0x4-在-screen-页面中运行-server"><a href="#0x4-在-screen-页面中运行-server" class="headerlink" title="0x4 在 screen 页面中运行 server"></a>0x4 在 screen 页面中运行 server</h3><p>执行以下指令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">screen -S mc</span><br><span class="line">screen -r mc</span><br></pre></td></tr></table></figure>
+
+<p>这两条指令新建了一个叫做 <code>mc</code> 的 screen 页面，并进入了这个页面。在这个 screen 页面中运行 server，等到 server 完全启动之后，依次按下 <code>Ctrl + a</code> 和 <code>d</code> 键以退出页面，此时 server 将在后台保持运行。之后可以通过 <code>screen -r mc</code> 指令返回页面。</p>
+<p>至此，一个 <code>minecraft 1.17.1</code> 纯净版的生存服务器就搭建好了。</p>
+<p>在 screen 页面中运行 shell 脚本启动服务器。</p>
+<hr>
+<hr>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><hr>
+<h3 id="0x0-下载启动器"><a href="#0x0-下载启动器" class="headerlink" title="0x0 下载启动器"></a>0x0 下载启动器</h3><h4 id="正版玩家"><a href="#正版玩家" class="headerlink" title="正版玩家"></a>正版玩家</h4><p>在 mojang 官网上下载 <code>java</code> 版的 <code>minecraft</code> 启动器并下载游戏。</p>
+<h4 id="盗版玩家"><a href="#盗版玩家" class="headerlink" title="盗版玩家"></a>盗版玩家</h4><p>下载 <code>PCL2</code> 或其他 mc 启动器。大部分启动器已经集成游戏本体及 <code>jre</code> 下载功能。按照提示下载 <code>1.17.1</code> 版本游戏即可。</p>
+<p>以 <code>PCL2</code> 为例：</p>
+<ol>
+<li><p>启动 <code>PCL2</code> 之后进入下载标签页，选择 <code>1.17.1</code> 版本。</p>
+<p><img src="https://i.loli.net/2021/09/07/JkeHwubrYWzFg4G.png" alt="image-20210907234953807"></p>
+</li>
+<li><p>选择你需要的功能，并点击下载。如果服务端使用了 <code>Forge</code> 或 <code>Fabric</code> 运行了 mod，客户端需要安装版本 <strong>完全相同</strong> 的 <code>Forge</code> 或 <code>Fabric</code>。</p>
+<p><img src="https://i.loli.net/2021/09/07/XOrguyelxIoL78Q.png" alt="image-20210907235221545"></p>
+</li>
+<li><p>等待游戏下载完成后，进入启动标签页，选择离线选项并进入游戏。进入游戏后选择 多人游戏 -&gt; 添加服务器，在服务器地址一栏输入服务器的 <code>ip</code> 地址或域名，点击完成。</p>
+</li>
+<li><p>点击服务器 -&gt; 加入服务器。</p>
+</li>
+</ol>
+<p>如果出现验证错误，请确认 <code>server.properties</code> 中 <code>online-mode</code> 的值已设置为 <code>false</code>。</p>
+<hr>
+<h3 id="0x1-添加-mod"><a href="#0x1-添加-mod" class="headerlink" title="0x1 添加 mod"></a>0x1 添加 mod</h3><p>首先需要在 <code>PCL2</code> 中下载与服务器相同版本的 <code>Forge</code> 或 <code>Fabric</code> 版客户端。</p>
+<h4 id="Forge"><a href="#Forge" class="headerlink" title="Forge"></a>Forge</h4><p>在 启动标签页 -&gt; 版本选择 -&gt; <code>Forge</code> 版本 选择 <code>1.17.1-Forge xx.x.xx</code>。</p>
+<p>在 启动标签页 -&gt; 版本设置 -&gt; mod 管理 -&gt;  打开 mod 文件夹。</p>
+<p>将服主发来的 <code>mod.zip</code> 解压到打开的文件夹里。</p>
+<p><img src="https://i.loli.net/2021/09/08/7OSWBhofVqweubX.png"></p>
+<h4 id="Fabric"><a href="#Fabric" class="headerlink" title="Fabric"></a>Fabric</h4><p>在 启动标签页 -&gt; 版本选择 -&gt; <code>Fabric</code> 版本 选择 <code>0.11.6</code>。</p>
+<p>在 启动标签页 -&gt; 版本选择 -&gt; <code>Fabric API</code> 版本 选择 <code>0.40.0</code>。</p>
+<p>在 启动标签页 -&gt; 版本设置 -&gt; mod 管理 -&gt;  打开 mod 文件夹。</p>
+<p>将服主发来的 <code>mod.zip</code> 解压到打开的文件夹里。</p>
+<img src="https://i.loli.net/2021/09/09/6Cn9ELGO5Ky4WS7.png" alt="image-20210909183610441" style="zoom: 80%;" />
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>摸鱼</tag>
+        <tag>游戏</tag>
+      </tags>
+  </entry>
 </search>
